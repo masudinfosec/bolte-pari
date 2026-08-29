@@ -124,6 +124,23 @@
   .hero p{margin:0;font-size:.82rem;opacity:.92}
   .notecard{background:var(--card);border:1px dashed var(--border);border-radius:var(--radius);
     padding:12px 14px;font-size:.85rem;color:var(--muted);margin-top:12px}
+  .hero.h2{background:linear-gradient(120deg,#7b1fa2,#e91e63);box-shadow:0 6px 18px rgba(123,31,162,.3)}
+  .hero.h3g{background:linear-gradient(120deg,#00897b,#43A047);box-shadow:0 6px 18px rgba(0,137,123,.3)}
+  .cvlist{display:grid;gap:10px;max-width:640px;margin:14px auto}
+  .cvcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:13px 15px;cursor:pointer;text-align:left}
+  .cvcard b{font-size:.98rem}
+  .cvcard .sc{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .cvwrap{max-width:640px;margin:0 auto}
+  .bub{max-width:86%;margin:8px 0;padding:9px 13px;border-radius:16px;background:var(--card);
+    border:1px solid var(--border)}
+  .bub.a{border-bottom-left-radius:4px;margin-right:auto}
+  .bub.b{border-bottom-right-radius:4px;margin-left:auto;background:var(--card2)}
+  .bub .en{font-size:.97rem}
+  .bub .bn{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .scat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px 15px;margin:0 0 10px;cursor:pointer;font-weight:700}
+  .sitem{padding:8px 2
   .dots{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:8px 0}
   .dot{width:14px;height:14px;border-radius:5px;background:var(--card2);border:1px solid var(--border)}
   .dot.full{background:var(--right);border-color:var(--right)}
@@ -221,7 +238,7 @@
 <header><div class="wrap">
   <div class="brandrow">
     <div class="logo">ব</div>
-    <div><div class="brandname">Bolte Pari</div><div class="brandsub">English · A1 → C2</div></div>
+    <div><div class="brandname">Bolte Pari</div><div class="brandsub">English, A1 → C2</div></div>
     <div class="hchips">
       <div class="hchip"><span class="fl">🔥</span><span id="hstreak">0</span></div>
       <div class="hchip" id="hdone">0/0</div>
@@ -244,10 +261,15 @@
     <div class="pcards" id="pcards"></div>
     <button class="hero" id="drillBtn">
       <h3>🎙️ Interview Drill</h3>
-      <p>Off-script প্রশ্ন · ৫ সেকেন্ড ভাবুন · জোরে উত্তর দিন · নমুনা উত্তর সাথে</p>
+      <p>Off-script প্রশ্ন, ৫ সেকেন্ড ভাবুন, জোরে উত্তর দিন, নমুনা উত্তর সাথে</p>
     </button>
+    <div class="sectitle">দৈনন্দিন ইংরেজি (শুনে শিখুন)</div>
+    <div class="pcards">
+      <div class="pcard" id="convoBtn"><div class="pic">💬</div><div class="pt">Conversations</div><div class="ps">১২টি বাস্তব সংলাপ</div></div>
+      <div class="pcard" id="sentBtn"><div class="pic">🗂️</div><div class="pt">Sentence Bank</div><div class="ps">১৫০টি দরকারি বাক্য</div></div>
+    </div>
     <div class="notecard">📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন
-      (পরিচয় · গতকাল · কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন.</div>
+      (পরিচয়, গতকাল, কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন.</div>
   </div>
 
   <!-- PROGRESS -->
@@ -275,7 +297,7 @@
   <div id="drillView" class="hidden"></div>
 </div>
 
-<footer>Bolte Pari · progress এই 'device' এ save থাকে — মাঝে মাঝে backup নিন</footer>
+<footer>Bolte Pari, progress এই 'device' এ save থাকে — মাঝে মাঝে backup নিন</footer>
 
 <nav class="bottom">
   <button class="nbtn active" data-v="Learn"><span class="ic">📚</span>শিখুন</button>
@@ -480,7 +502,7 @@
     document.getElementById("pdots").innerHTML=dots;
     var w=new Date(),tD=0,sD=0;
     for(var j=0;j<7;j++){var r=(daily()[dstr(w)])||{};if(r.mcq)tD++;if(r.sp)sD++;w.setDate(w.getDate()-1);}
-    document.getElementById("pbal").innerHTML="এই ৭ দিনে: test "+tD+" দিন · speaking "+sD+" দিন"+
+    document.getElementById("pbal").innerHTML="এই ৭ দিনে: test "+tD+" দিন, speaking "+sD+" দিন"+
       ((tD-sD>=3)?' <b style="color:var(--hard)">⚠️ মুখে বলাটাই আসল!</b>':'');
   }
   function st(b,s){return '<div class="stat"><b>'+b+'</b><span>'+s+'</span></div>';}
@@ -654,7 +676,7 @@
         return;
       }
       var item=qs[idx], left=5;
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+qs.length+' · ভাবার সময় ৫ সেকেন্ড, তারপর জোরে উত্তর</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+qs.length+', ভাবার সময় ৫ সেকেন্ড, তারপর জোরে উত্তর</div>'+
         '<div class="drillq">'+esc(item.q)+' '+ttsBtn(item.q)+'</div>'+
         '<div class="drillcount" id="dc">5</div>'+
         '<div id="dctl"><button class="btn ghost small" id="drillStop">বন্ধ করি</button></div></div>';
@@ -677,6 +699,60 @@
     show();
   }
   document.getElementById("drillBtn").onclick=openDrill;
+  var CONVOS=(window.STUDY_DATA&&window.STUDY_DATA.convos)||[];
+  var SENTS=(window.STUDY_DATA&&window.STUDY_DATA.sentences&&window.STUDY_DATA.sentences.cats)||[];
+  var cb=document.getElementById("convoBtn"); if(cb)cb.onclick=openConvos;
+  var sb=document.getElementById("sentBtn"); if(sb)sb.onclick=openSents;
+
+  function openConvos(){
+    var v=engineView(); var idx=0;
+    function show(){
+      var d=CONVOS[idx];
+      var lines=d.lines.map(function(l){
+        return '<div class="ex"><div class="en"><b>'+esc(l.sp)+':</b> '+esc(l.en)+' '+ttsBtn(l.en)+'</div><div class="bn">'+esc(l.bn)+'</div></div>';
+      }).join("");
+      v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
+        '<div class="drillmeta">সংলাপ '+(idx+1)+' / '+CONVOS.length+'</div>'+
+        '<h3 style="margin:6px 0">'+esc(d.title)+' <button class="btn ghost small" id="cvPlay">🔊 পুরোটা</button></h3>'+
+        '<div class="bn" style="margin-bottom:10px">'+esc(d.scene)+'</div>'+
+        '<div class="exgrid" style="grid-template-columns:1fr">'+lines+'</div>'+
+        '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'+
+        (idx>0?'<button class="btn ghost" id="cvPrev">← আগের</button>':'')+
+        (idx<CONVOS.length-1?'<button class="btn" id="cvNext">পরের →</button>':'<button class="btn" id="cvDone">✅ শেষ</button>')+
+        '<button class="btn ghost" id="cvExit">প্র্যাকটিসে ফিরি</button></div></div>';
+      var pl=document.getElementById("cvPlay");
+      pl.onclick=function(){ var i=0; (function seq(){ if(i>=d.lines.length){return;} speak(d.lines[i].en); i++; setTimeout(seq, Math.max(1600, d.lines[i-1].en.length*70)); })(); };
+      var nx=document.getElementById("cvNext"); if(nx)nx.onclick=function(){idx++;show();window.scrollTo(0,0);};
+      var pv=document.getElementById("cvPrev"); if(pv)pv.onclick=function(){idx--;show();window.scrollTo(0,0);};
+      var dn=document.getElementById("cvDone"); if(dn)dn.onclick=function(){autoMark("li");history.back();};
+      document.getElementById("cvExit").onclick=function(){history.back();};
+    }
+    show();
+  }
+
+  function openSents(){
+    var v=engineView(); var ci=0;
+    function show(){
+      var c=SENTS[ci];
+      var items=c.items.map(function(s){
+        return '<div class="ex"><div class="en">'+esc(s.en)+' '+ttsBtn(s.en)+'</div><div class="bn">'+esc(s.bn)+'</div></div>';
+      }).join("");
+      var tabs=SENTS.map(function(c2,i){return '<button class="lchip'+(i===ci?' active':'')+'" data-i="'+i+'">'+esc(c2.title)+'</button>';}).join("");
+      v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
+        '<div class="drillmeta">বিভাগ '+(ci+1)+' / '+SENTS.length+'</div>'+
+        '<div class="levelbar" style="margin:8px 0">'+tabs+'</div>'+
+        '<h3 style="margin:4px 0 10px">'+esc(c.title)+'</h3>'+
+        '<div class="exgrid" style="grid-template-columns:1fr">'+items+'</div>'+
+        '<div style="margin-top:14px"><button class="btn" id="stDone">✅ পড়া হয়েছে</button> '+
+        '<button class="btn ghost" id="stExit">প্র্যাকটিসে ফিরি</button></div></div>';
+      Array.prototype.forEach.call(v.querySelectorAll(".levelbar .lchip"),function(t){
+        t.onclick=function(){ci=+t.getAttribute("data-i");show();window.scrollTo(0,0);};
+      });
+      document.getElementById("stDone").onclick=function(){autoMark("li");history.back();};
+      document.getElementById("stExit").onclick=function(){history.back();};
+    }
+    show();
+  }
 
   /* ---------- practice engines (pronunciation / listening / mixed quiz) ---------- */
   function engineView(){
@@ -726,7 +802,7 @@
         return;
       }
       var it=items[idx];
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+' · শুনুন → ৩ বার জোরে বলুন</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', শুনুন → ৩ বার জোরে বলুন</div>'+
         '<div class="drillq">'+esc(it.w)+' '+ttsBtn(it.w.replace(/—/g,", "))+'</div>'+
         '<div class="drillans" style="text-align:center">💡 '+esc(it.tip)+'</div>'+
         '<button class="btn" id="prN">পরেরটা →</button> <button class="btn ghost" id="prS">বন্ধ করি</button></div>';
@@ -761,7 +837,7 @@
         return;
       }
       var it=items[idx];
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+' · আগে শুনুন — না দেখে বোঝার চেষ্টা</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', আগে শুনুন — না দেখে বোঝার চেষ্টা</div>'+
         '<div style="font-size:2.6rem;margin:14px 0">🎧</div>'+
         '<div id="lctl"><button class="btn" id="liP">🔊 আবার শুনি</button> <button class="btn ghost" id="liR">উত্তর দেখাও</button></div></div>';
       speak(it.en);
@@ -797,7 +873,7 @@
         return;
       }
       var t=items[idx];
-      v.innerHTML='<div class="drillbox" style="text-align:left"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+items.length+' · স্কোর '+score+'</div>'+
+      v.innerHTML='<div class="drillbox" style="text-align:left"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+items.length+', স্কোর '+score+'</div>'+
         '<div style="font-weight:700;margin:10px 0;font-size:1.02rem">'+gapify(hl(t.q))+'</div>'+
         '<div class="opts long" id="mxopts">'+t.options.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+hl(o)+'</button>';}).join("")+'</div>'+
         '<div id="mxnext"></div></div>';
@@ -848,7 +924,7 @@
   /* ---------- Android hardware back button (SPA history) ---------- */
   window.addEventListener("popstate",function(){
     var dv=document.getElementById("drillView"), uv=document.getElementById("unitView");
-    if(dv&&!dv.classList.contains("hidden")){ stopDrillTimer(); showTab("Practice"); }
+    if(dv&&!dv.classList.contains("hidden")){ stopDrillTimer(); try{if(NATIVE_TTS)AndroidBridge.stopSpeak();else if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){} showTab("Practice"); }
     else if(uv&&!uv.classList.contains("hidden")){ showTab("Learn"); }
   });
 
