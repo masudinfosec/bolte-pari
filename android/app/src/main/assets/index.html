@@ -247,7 +247,7 @@
       <p>Off-script প্রশ্ন · ৫ সেকেন্ড ভাবুন · জোরে উত্তর দিন · নমুনা উত্তর সাথে</p>
     </button>
     <div class="notecard">📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন
-      (পরিচয় · গতকাল · কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন।</div>
+      (পরিচয় · গতকাল · কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন.</div>
   </div>
 
   <!-- PROGRESS -->
@@ -293,7 +293,7 @@
   var LEVELS=["A1","A2","B1","B2","C1","C2"];
   var KEY="study_center_progress_v1";
   function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}
-  function saveP(p){try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){alert("Progress save হলো না।");}}
+  function saveP(p){try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){alert("Progress save হলো না.");}}
   var progress=load();
   function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   function today(){return dstr(new Date());}
@@ -411,7 +411,7 @@
       return true;
     });
     var el=document.getElementById("ulist");
-    if(!list.length){el.innerHTML='<p style="color:var(--muted)">কিছু পাওয়া যায়নি।</p>';return;}
+    if(!list.length){el.innerHTML='<p style="color:var(--muted)">কিছু পাওয়া যায়নি.</p>';return;}
     el.innerHTML=list.map(function(u){
       var pr=progress[u.id]||{};
       var pct=pr.score?Math.round(pr.score.correct/pr.score.total*100):(pr.done?100:0);
@@ -437,7 +437,7 @@
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
           _pendingUnlock=id;
-          if(confirm("এই unit এখনো locked. আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে।\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
+          if(confirm("এই unit এখনো locked. আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
             try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
           }
           return;
@@ -562,8 +562,8 @@
       var keys=Object.keys(answered);if(keys.length<u.test.length)return;
       var cc=keys.filter(function(k){return answered[k];}).length;
       var r=document.getElementById("result");r.classList.remove("hidden");
-      r.innerHTML='🎯 ফল: '+cc+' / '+u.test.length+' সঠিক। '+
-        (cc===u.test.length?'দারুণ! 💯':(cc>=u.test.length*0.7?'ভালো! revise করুন।':'নিয়মটা আবার পড়ে চেষ্টা করুন।'));
+      r.innerHTML='🎯 ফল: '+cc+' / '+u.test.length+' সঠিক. '+
+        (cc===u.test.length?'দারুণ! 💯':(cc>=u.test.length*0.7?'ভালো! revise করুন.':'নিয়মটা আবার পড়ে চেষ্টা করুন.'));
       var p=progress[id]||{};p.score={correct:cc,total:u.test.length};if(!p.done){p.done=true;p.date=today();}
       progress[id]=p;saveP(progress);autoMark("mcq");
       var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
@@ -646,7 +646,7 @@
       if(idx>=qs.length){
         v.innerHTML='<div class="drillbox"><h3>🎯 Drill শেষ</h3>'+
           '<p>মসৃণ উত্তর: <b style="color:var(--right)">'+smooth+'</b> / '+qs.length+'</p>'+
-          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে। 🎤 Speaking-এর টিক পড়ে গেছে।</p>'+
+          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে. 🎤 Speaking-এর টিক পড়ে গেছে.</p>'+
           '<button class="btn" id="drillAgain">আবার ১০টা</button> <button class="btn ghost" id="drillExit">← ফিরে যাই</button></div>';
         autoMark("sp");
         document.getElementById("drillAgain").onclick=openDrill;
@@ -664,7 +664,7 @@
         var dc=document.getElementById("dc"); if(!dc){stopDrillTimer();return;}
         if(left>0){ dc.textContent=left; return; }
         stopDrillTimer();
-        dc.outerHTML='<div class="drillsay">🎤 এখন উত্তর বলুন — ২-৩ বাক্য, তারপর থামুন।</div>';
+        dc.outerHTML='<div class="drillsay">🎤 এখন উত্তর বলুন — ২-৩ বাক্য, তারপর থামুন.</div>';
         document.getElementById("dctl").innerHTML=
           '<div class="drillans">💡 <b>নমুনা উত্তর</b> (নিজের সত্য তথ্য [ ]-এ বসান): '+ttsBtn(item.a||"")+'<br>'+esc(item.a||"")+'</div>'+
           '<button class="btn" id="dok">✅ পেরেছি</button> <button class="btn ghost" id="dno">😵 আটকেছি</button>';
@@ -687,30 +687,30 @@
     window.scrollTo(0,0); return v;
   }
   var PRON=[
-    {w:"ship — sheep", tip:"ship-এ i ছোট্ট করে; sheep-এ ee টেনে লম্বা।"},
-    {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়।"},
-    {w:"very — wary", tip:"v-তে উপরের দাঁত নিচের ঠোঁটে লাগান; w-তে ঠোঁট গোল, দাঁত লাগবে না।"},
-    {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ।"},
-    {w:"pull — full", tip:"p-তে বাতাসের ধাক্কা (কাগজ নড়বে); f-তে দাঁত-ঠোঁটে বাতাস।"},
-    {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে। হাত মুখের সামনে রেখে পরখ করুন।"},
-    {w:"see — she", tip:"s সাপের শব্দ; sh-তে ঠোঁট এগিয়ে ‘শ’।"},
-    {w:"sip — zip", tip:"s-এ গলা কাঁপে না; z-এ গলায় হাত দিলে কাঁপুনি টের পাবেন।"},
-    {w:"think — sink", tip:"th-তে জিভের ডগা দাঁতের ফাঁকে; s-এ জিভ ভেতরে।"},
-    {w:"they — day", tip:"they-র th নরম কাঁপা শব্দ; day-তে জিভ দাঁতের পেছনে ঠোকা।"},
-    {w:"cat — cut — cart", tip:"cat-এ অ্যা; cut-এ ছোট আ; cart-এ লম্বা আ-র।"},
-    {w:"walk — work", tip:"walk-এ ‘ওয়াক’ (l নীরব); work-এ ‘ওয়ার্ক’ — er শব্দ।"},
-    {w:"heart — hurt", tip:"heart-এ লম্বা আ; hurt-এ er — দুটোই r আছে কিন্তু স্বর আলাদা।"},
+    {w:"ship — sheep", tip:"ship-এ i ছোট্ট করে; sheep-এ ee টেনে লম্বা."},
+    {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়."},
+    {w:"very — wary", tip:"v-তে উপরের দাঁত নিচের ঠোঁটে লাগান; w-তে ঠোঁট গোল, দাঁত লাগবে না."},
+    {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ."},
+    {w:"pull — full", tip:"p-তে বাতাসের ধাক্কা (কাগজ নড়বে); f-তে দাঁত-ঠোঁটে বাতাস."},
+    {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে. হাত মুখের সামনে রেখে পরখ করুন."},
+    {w:"see — she", tip:"s সাপের শব্দ; sh-তে ঠোঁট এগিয়ে ‘শ’."},
+    {w:"sip — zip", tip:"s-এ গলা কাঁপে না; z-এ গলায় হাত দিলে কাঁপুনি টের পাবেন."},
+    {w:"think — sink", tip:"th-তে জিভের ডগা দাঁতের ফাঁকে; s-এ জিভ ভেতরে."},
+    {w:"they — day", tip:"they-র th নরম কাঁপা শব্দ; day-তে জিভ দাঁতের পেছনে ঠোকা."},
+    {w:"cat — cut — cart", tip:"cat-এ অ্যা; cut-এ ছোট আ; cart-এ লম্বা আ-র."},
+    {w:"walk — work", tip:"walk-এ ‘ওয়াক’ (l নীরব); work-এ ‘ওয়ার্ক’ — er শব্দ."},
+    {w:"heart — hurt", tip:"heart-এ লম্বা আ; hurt-এ er — দুটোই r আছে কিন্তু স্বর আলাদা."},
     {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)."},
     {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)."},
-    {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না।"},
-    {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়।"},
-    {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব।"},
-    {w:"receipt", tip:"‘রি-সিট’ — p সম্পূর্ণ নীরব।"},
-    {w:"island", tip:"‘আই-ল্যান্ড’ — s নীরব।"},
-    {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না।"},
-    {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়।"},
-    {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়।"},
-    {w:"world — word", tip:"world-এ r+l দুটোই; word-এ শুধু er-ড।"}
+    {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না."},
+    {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়."},
+    {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব."},
+    {w:"receipt", tip:"‘রি-সিট’ — p সম্পূর্ণ নীরব."},
+    {w:"island", tip:"‘আই-ল্যান্ড’ — s নীরব."},
+    {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না."},
+    {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়."},
+    {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়."},
+    {w:"world — word", tip:"world-এ r+l দুটোই; word-এ শুধু er-ড."}
   ];
   function openPron(){
     var v=engineView();
@@ -718,7 +718,7 @@
     function say(it){ speak(it.w.replace(/—/g,", ")); }
     function show(){
       if(idx>=items.length){
-        v.innerHTML='<div class="drillbox"><h3>🔊 উচ্চারণ drill শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে। ঠোঁট-জিভের অবস্থান মনে রাখুন।</p>'+
+        v.innerHTML='<div class="drillbox"><h3>🔊 উচ্চারণ drill শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে. ঠোঁট-জিভের অবস্থান মনে রাখুন.</p>'+
           '<button class="btn" id="prA">আবার ৮টা</button> <button class="btn ghost" id="prX">← ফিরে যাই</button></div>';
         autoMark("pr");
         document.getElementById("prA").onclick=function(){idx=0;items=PRON.slice().sort(function(){return Math.random()-0.5;}).slice(0,8);show();};
@@ -753,7 +753,7 @@
     var idx=0;
     function show(){
       if(idx>=items.length){
-        v.innerHTML='<div class="drillbox"><h3>🎧 Listening শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে।</p>'+
+        v.innerHTML='<div class="drillbox"><h3>🎧 Listening শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে.</p>'+
           '<button class="btn" id="liA">আবার ৮টা</button> <button class="btn ghost" id="liX">← ফিরে যাই</button></div>';
         autoMark("li");
         document.getElementById("liA").onclick=openListenRestart;
@@ -823,7 +823,7 @@
     var data=JSON.stringify(progress,null,2);
     var hasNativeSave=false;
     try{ hasNativeSave=(typeof AndroidBridge!=="undefined")&&(typeof AndroidBridge.saveFile==="function"); }catch(e){}
-    if(hasNativeSave){ try{AndroidBridge.saveFile(name,data);}catch(e){alert("Save হলো না।");} return; }
+    if(hasNativeSave){ try{AndroidBridge.saveFile(name,data);}catch(e){alert("Save হলো না.");} return; }
     var blob=new Blob([data],{type:"application/json"});
     var a=document.createElement("a");a.href=URL.createObjectURL(blob);
     a.download=name;a.click();
@@ -831,7 +831,7 @@
   document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
   document.getElementById("importFile").onchange=function(e){
     var f=e.target.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(){try{progress=JSON.parse(r.result);saveP(progress);showTab("Progress");alert("Restore হয়েছে ✅");}catch(err){alert("ফাইল পড়া গেল না।");}};
+    r.onload=function(){try{progress=JSON.parse(r.result);saveP(progress);showTab("Progress");alert("Restore হয়েছে ✅");}catch(err){alert("ফাইল পড়া গেল না.");}};
     r.readAsText(f);
   };
   document.getElementById("resetBtn").onclick=function(){
@@ -853,7 +853,7 @@
   });
 
   /* ---------- init ---------- */
-  if(!DATA.length)document.getElementById("ulist").innerHTML='<p style="color:var(--muted)">data.js খালি।</p>';
+  if(!DATA.length)document.getElementById("ulist").innerHTML='<p style="color:var(--muted)">data.js খালি.</p>';
   render_levelbar(); render_list(); render_header();
 })();
 </script>
