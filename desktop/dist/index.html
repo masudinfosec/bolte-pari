@@ -96,6 +96,14 @@
   .blank{display:inline-block;min-width:44px;padding:0 7px;margin:0 2px;border-bottom:2.5px solid var(--brand);
     color:var(--brand);font-weight:700;text-align:center;border-radius:2px}
   .blank.filled{border-bottom-color:var(--right);color:var(--right)}
+  .slots{background:var(--card2);border-radius:10px;padding:7px 12px;font-size:.9rem;
+    margin-bottom:9px;color:var(--brand);font-weight:600}
+  .ptab{width:100%;border-collapse:collapse}
+  .ptab td{padding:7px 6px;border-bottom:1px dashed var(--border);vertical-align:top}
+  .ptab tr:last-child td{border-bottom:none}
+  .ptab .pl{white-space:nowrap;font-weight:700;font-size:.78rem;color:var(--muted);width:88px;padding-top:10px}
+  .ptab .en{font-size:.97rem}
+  .ptab .bn{font-size:.8rem;color:var(--muted)}
   .chev{color:var(--muted);flex:none;font-size:1.1rem}
 
   /* ===== practice tab ===== */
@@ -297,12 +305,16 @@
   var _voices=[];
   function loadVoices(){ try{_voices=(window.speechSynthesis&&window.speechSynthesis.getVoices())||[];}catch(e){_voices=[];} }
   if(window.speechSynthesis){ loadVoices(); try{window.speechSynthesis.onvoiceschanged=loadVoices;}catch(e){} }
-  var TTS_OK=!!(window.speechSynthesis&&window.SpeechSynthesisUtterance);
+  var NATIVE_TTS=false;
+  try{ NATIVE_TTS=(typeof AndroidBridge!=="undefined")&&(typeof AndroidBridge.speak==="function"); }catch(e){}
+  var TTS_OK=NATIVE_TTS||!!(window.speechSynthesis&&window.SpeechSynthesisUtterance);
   function speak(text){
+    var clean=String(text||"").replace(/\*\*/g,"").replace(/\[|\]/g,"").trim();
+    if(NATIVE_TTS){ try{AndroidBridge.stopSpeak();AndroidBridge.speak(clean);}catch(e){} return; }
     if(!TTS_OK)return;
     try{
       window.speechSynthesis.cancel();
-      var u=new SpeechSynthesisUtterance(String(text||"").replace(/\*\*/g,"").trim());
+      var u=new SpeechSynthesisUtterance(clean);
       u.lang="en-US"; u.rate=0.9;
       var v=_voices.filter(function(x){return /en[-_]US/i.test(x.lang);})[0]||_voices.filter(function(x){return /^en/i.test(x.lang);})[0];
       if(v)u.voice=v;
@@ -336,8 +348,8 @@
   };
 
   /* ---------- daily tracker ---------- */
-  var PKEYS=[["pr","🔊","উচ্চারণ","03 ফাইলের drill"],["sp","🎤","Speaking","রেকর্ডিং / drill"],
-             ["li","🎧","Listening","আজকের log-সহ"],["mcq","📝","Test","unit test দিলে অটো"]];
+  var PKEYS=[["pr","🔊","উচ্চারণ","শুনে বলুন — drill"],["sp","🎤","Speaking","Interview drill"],
+             ["li","🎧","Listening","শুনে বুঝুন — drill"],["mcq","📝","Test","মিশ্র ১০ প্রশ্ন"]];
   function daily(){ if(!progress._daily) progress._daily={}; return progress._daily; }
   function dayRec(ds){ var d=daily(); if(!d[ds]) d[ds]={}; return d[ds]; }
   function dayCount(ds){ var r=(daily()[ds])||{}; var n=0; PKEYS.forEach(function(k){ if(r[k[0]]) n++; }); return n; }
@@ -447,8 +459,7 @@
     Array.prototype.forEach.call(el.querySelectorAll(".pcard"),function(c){
       c.onclick=function(){
         var k=c.getAttribute("data-k");
-        var r=dayRec(today()); r[k]=!r[k]; saveP(progress);
-        render_practice(); render_header();
+        if(k==="pr")openPron(); else if(k==="sp")openDrill(); else if(k==="li")openListen(); else openMixQuiz();
       };
     });
   }
@@ -487,6 +498,13 @@
     var learn="";
     if(u.explain) learn+='<div class="lbox"><h4>🧠 কীভাবে কাজ করে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
       (u.form?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
+    if(u.patterns){
+      var P=u.patterns;
+      function prow(lbl,p){return '<tr><td class="pl">'+lbl+'</td><td><div class="en">'+esc(p.en)+' '+ttsBtn(p.en)+'</div><div class="bn">'+esc(p.bn)+'</div></td></tr>';}
+      learn+='<div class="lbox"><h4>🧩 গঠন-ছক — কোনটা কোথায় বসে</h4>'+
+        '<div class="slots">'+esc(P.slots)+'</div>'+
+        '<table class="ptab">'+prow("✅ হ্যাঁ-বোধক",P.pos)+prow("❌ না-বোধক",P.neg)+prow("❓ প্রশ্ন",P.q)+'</table></div>';
+    }
     if(u.diagram&&DIAG[u.diagram]) learn+='<div class="diagram">'+DIAG[u.diagram]+'</div>';
     if(u.notes&&u.notes.length) learn+='<div class="lbox"><h4>📌 মূল নিয়ম</h4><ul style="margin:0;padding-left:1.2rem">'+
       u.notes.map(function(n){return '<li>'+hl(n)+'</li>';}).join("")+'</ul></div>';
@@ -660,11 +678,155 @@
   }
   document.getElementById("drillBtn").onclick=openDrill;
 
+  /* ---------- practice engines (pronunciation / listening / mixed quiz) ---------- */
+  function engineView(){
+    try{history.pushState({v:'drill'},'');}catch(e){}
+    views.forEach(function(vn){document.getElementById("view"+vn).classList.add("hidden");});
+    document.getElementById("unitView").classList.add("hidden");
+    var v=document.getElementById("drillView"); v.classList.remove("hidden");
+    window.scrollTo(0,0); return v;
+  }
+  var PRON=[
+    {w:"ship — sheep", tip:"ship-এ i ছোট্ট করে; sheep-এ ee টেনে লম্বা।"},
+    {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়।"},
+    {w:"very — wary", tip:"v-তে উপরের দাঁত নিচের ঠোঁটে লাগান; w-তে ঠোঁট গোল, দাঁত লাগবে না।"},
+    {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ।"},
+    {w:"pull — full", tip:"p-তে বাতাসের ধাক্কা (কাগজ নড়বে); f-তে দাঁত-ঠোঁটে বাতাস।"},
+    {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে। হাত মুখের সামনে রেখে পরখ করুন।"},
+    {w:"see — she", tip:"s সাপের শব্দ; sh-তে ঠোঁট এগিয়ে ‘শ’।"},
+    {w:"sip — zip", tip:"s-এ গলা কাঁপে না; z-এ গলায় হাত দিলে কাঁপুনি টের পাবেন।"},
+    {w:"think — sink", tip:"th-তে জিভের ডগা দাঁতের ফাঁকে; s-এ জিভ ভেতরে।"},
+    {w:"they — day", tip:"they-র th নরম কাঁপা শব্দ; day-তে জিভ দাঁতের পেছনে ঠোকা।"},
+    {w:"cat — cut — cart", tip:"cat-এ অ্যা; cut-এ ছোট আ; cart-এ লম্বা আ-র।"},
+    {w:"walk — work", tip:"walk-এ ‘ওয়াক’ (l নীরব); work-এ ‘ওয়ার্ক’ — er শব্দ।"},
+    {w:"heart — hurt", tip:"heart-এ লম্বা আ; hurt-এ er — দুটোই r আছে কিন্তু স্বর আলাদা।"},
+    {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)।"},
+    {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)।"},
+    {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না।"},
+    {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়।"},
+    {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব।"},
+    {w:"receipt", tip:"‘রি-সিট’ — p সম্পূর্ণ নীরব।"},
+    {w:"island", tip:"‘আই-ল্যান্ড’ — s নীরব।"},
+    {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না।"},
+    {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়।"},
+    {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়।"},
+    {w:"world — word", tip:"world-এ r+l দুটোই; word-এ শুধু er-ড।"}
+  ];
+  function openPron(){
+    var v=engineView();
+    var items=PRON.slice().sort(function(){return Math.random()-0.5;}).slice(0,8), idx=0;
+    function say(it){ speak(it.w.replace(/—/g,", ")); }
+    function show(){
+      if(idx>=items.length){
+        v.innerHTML='<div class="drillbox"><h3>🔊 উচ্চারণ drill শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে। ঠোঁট-জিভের অবস্থান মনে রাখুন।</p>'+
+          '<button class="btn" id="prA">আবার ৮টা</button> <button class="btn ghost" id="prX">← ফিরে যাই</button></div>';
+        autoMark("pr");
+        document.getElementById("prA").onclick=function(){idx=0;items=PRON.slice().sort(function(){return Math.random()-0.5;}).slice(0,8);show();};
+        document.getElementById("prX").onclick=function(){history.back();};
+        return;
+      }
+      var it=items[idx];
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+' · শুনুন → ৩ বার জোরে বলুন</div>'+
+        '<div class="drillq">'+esc(it.w)+' '+ttsBtn(it.w.replace(/—/g,", "))+'</div>'+
+        '<div class="drillans" style="text-align:center">💡 '+esc(it.tip)+'</div>'+
+        '<button class="btn" id="prN">পরেরটা →</button> <button class="btn ghost" id="prS">বন্ধ করি</button></div>';
+      say(it);
+      document.getElementById("prN").onclick=function(){idx++;show();};
+      document.getElementById("prS").onclick=function(){history.back();};
+    }
+    show();
+  }
+  var _LPOOL=null;
+  function lpool(){
+    if(_LPOOL)return _LPOOL;
+    _LPOOL=[];
+    DATA.forEach(function(u){(u.examples||[]).forEach(function(e){
+      var en=typeof e==="string"?e:e.en; var bn=(e&&e.bn)?e.bn:"";
+      if(en&&bn&&en.length<90)_LPOOL.push({en:String(en).replace(/\*\*/g,""),bn:bn});
+    });});
+    return _LPOOL;
+  }
+  function openListen(){
+    var v=engineView();
+    var pool=lpool(), items=[], used={};
+    while(items.length<8&&items.length<pool.length){var r=Math.floor(Math.random()*pool.length);if(!used[r]){used[r]=1;items.push(pool[r]);}}
+    var idx=0;
+    function show(){
+      if(idx>=items.length){
+        v.innerHTML='<div class="drillbox"><h3>🎧 Listening শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে।</p>'+
+          '<button class="btn" id="liA">আবার ৮টা</button> <button class="btn ghost" id="liX">← ফিরে যাই</button></div>';
+        autoMark("li");
+        document.getElementById("liA").onclick=openListenRestart;
+        document.getElementById("liX").onclick=function(){history.back();};
+        return;
+      }
+      var it=items[idx];
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+' · আগে শুনুন — না দেখে বোঝার চেষ্টা</div>'+
+        '<div style="font-size:2.6rem;margin:14px 0">🎧</div>'+
+        '<div id="lctl"><button class="btn" id="liP">🔊 আবার শুনি</button> <button class="btn ghost" id="liR">উত্তর দেখাও</button></div></div>';
+      speak(it.en);
+      document.getElementById("liP").onclick=function(){speak(it.en);};
+      document.getElementById("liR").onclick=function(){
+        document.getElementById("lctl").innerHTML='<div class="drillans"><b>'+esc(it.en)+'</b> '+ttsBtn(it.en)+'<br>'+esc(it.bn)+'</div>'+
+          '<button class="btn" id="liN">পরেরটা →</button>';
+        document.getElementById("liN").onclick=function(){idx++;show();};
+      };
+    }
+    function openListenRestart(){
+      items=[];used={};
+      while(items.length<8&&items.length<pool.length){var r=Math.floor(Math.random()*pool.length);if(!used[r]){used[r]=1;items.push(pool[r]);}}
+      idx=0;show();
+    }
+    show();
+  }
+  function openMixQuiz(){
+    var v=engineView();
+    var all=[]; DATA.forEach(function(u){(u.test||[]).forEach(function(t){all.push(t);});});
+    var items=[],used={};
+    while(items.length<10&&items.length<all.length){var r=Math.floor(Math.random()*all.length);if(!used[r]){used[r]=1;items.push(all[r]);}}
+    var idx=0,score=0;
+    function show(){
+      if(idx>=items.length){
+        v.innerHTML='<div class="drillbox"><h3>📝 মিশ্র টেস্ট শেষ</h3><p>ফল: <b style="color:var(--right)">'+score+'</b> / '+items.length+'</p>'+
+          '<button class="btn" id="mxA">আবার ১০টা</button> <button class="btn ghost" id="mxX">← ফিরে যাই</button></div>';
+        autoMark("mcq");
+        document.getElementById("mxA").onclick=function(){idx=0;score=0;items=[];used={};
+          while(items.length<10&&items.length<all.length){var r=Math.floor(Math.random()*all.length);if(!used[r]){used[r]=1;items.push(all[r]);}}
+          show();};
+        document.getElementById("mxX").onclick=function(){history.back();};
+        return;
+      }
+      var t=items[idx];
+      v.innerHTML='<div class="drillbox" style="text-align:left"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+items.length+' · স্কোর '+score+'</div>'+
+        '<div style="font-weight:700;margin:10px 0;font-size:1.02rem">'+gapify(hl(t.q))+'</div>'+
+        '<div class="opts long" id="mxopts">'+t.options.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+hl(o)+'</button>';}).join("")+'</div>'+
+        '<div id="mxnext"></div></div>';
+      Array.prototype.forEach.call(document.querySelectorAll("#mxopts .opt"),function(b){
+        b.onclick=function(){
+          if(b.classList.contains("disabled"))return;
+          var i=+b.getAttribute("data-i");
+          Array.prototype.forEach.call(document.querySelectorAll("#mxopts .opt"),function(x){x.classList.add("disabled");
+            var xi=+x.getAttribute("data-i"); if(xi===t.answer)x.classList.add("right"); else if(xi===i)x.classList.add("wrong");});
+          if(i===t.answer)score++;
+          var bl=v.querySelector(".blank"); if(bl){bl.textContent=t.options[t.answer];bl.classList.add("filled");}
+          document.getElementById("mxnext").innerHTML='<div class="explain show">💡 '+hl(t.explain||"")+'</div><button class="btn" id="mxN" style="margin-top:10px">পরেরটা →</button>';
+          document.getElementById("mxN").onclick=function(){idx++;show();};
+        };
+      });
+    }
+    show();
+  }
+
   /* ---------- data buttons ---------- */
   document.getElementById("exportBtn").onclick=function(){
-    var blob=new Blob([JSON.stringify(progress,null,2)],{type:"application/json"});
+    var name="boltepari_progress_"+today()+".json";
+    var data=JSON.stringify(progress,null,2);
+    var hasNativeSave=false;
+    try{ hasNativeSave=(typeof AndroidBridge!=="undefined")&&(typeof AndroidBridge.saveFile==="function"); }catch(e){}
+    if(hasNativeSave){ try{AndroidBridge.saveFile(name,data);}catch(e){alert("Save হলো না।");} return; }
+    var blob=new Blob([data],{type:"application/json"});
     var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-    a.download="boltepari_progress_"+today()+".json";a.click();
+    a.download=name;a.click();
   };
   document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
   document.getElementById("importFile").onchange=function(e){
