@@ -16,3 +16,6 @@ node_modules/
 
 # keep the prebuilt release APK for distribution
 !android/BoltePari.apk
+
+# stray root screenshots
+/*.png
