@@ -437,7 +437,7 @@
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
           _pendingUnlock=id;
-          if(confirm("এই unit এখনো locked। আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে।\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
+          if(confirm("এই unit এখনো locked. আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে।\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
             try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
           }
           return;
@@ -496,15 +496,15 @@
     var pr=progress[id]||{};
 
     var learn="";
-    if(u.explain) learn+='<div class="lbox"><h4>🧠 কীভাবে কাজ করে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
-      ((u.form&&!u.patterns)?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
     if(u.patterns){
       var P=u.patterns;
       function prow(lbl,p){return '<tr><td class="pl">'+lbl+'</td><td><div class="en">'+esc(p.en)+' '+ttsBtn(p.en)+'</div><div class="bn">'+esc(p.bn)+'</div></td></tr>';}
-      learn+='<div class="lbox"><h4>🧩 গঠন-ছক — কোনটা কোথায় বসে</h4>'+
+      learn+='<div class="lbox"><h4>🧩 গঠন — কোনটা কোথায় বসে</h4>'+
         '<div class="slots">'+esc(P.slots)+'</div>'+
         '<table class="ptab">'+prow("✅ হ্যাঁ-বোধক",P.pos)+prow("❌ না-বোধক",P.neg)+prow("❓ প্রশ্ন",P.q)+'</table></div>';
     }
+    if(u.explain) learn+='<div class="lbox"><h4>🧠 এক নজরে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
+      ((u.form&&!u.patterns)?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
     if(u.diagram&&DIAG[u.diagram]) learn+='<div class="diagram">'+DIAG[u.diagram]+'</div>';
     if(u.notes&&u.notes.length) learn+='<div class="lbox"><h4>📌 মূল নিয়ম</h4><ul style="margin:0;padding-left:1.2rem">'+
       u.notes.map(function(n){return '<li>'+hl(n)+'</li>';}).join("")+'</ul></div>';
@@ -700,8 +700,8 @@
     {w:"cat — cut — cart", tip:"cat-এ অ্যা; cut-এ ছোট আ; cart-এ লম্বা আ-র।"},
     {w:"walk — work", tip:"walk-এ ‘ওয়াক’ (l নীরব); work-এ ‘ওয়ার্ক’ — er শব্দ।"},
     {w:"heart — hurt", tip:"heart-এ লম্বা আ; hurt-এ er — দুটোই r আছে কিন্তু স্বর আলাদা।"},
-    {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)।"},
-    {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)।"},
+    {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)."},
+    {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)."},
     {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না।"},
     {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়।"},
     {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব।"},
