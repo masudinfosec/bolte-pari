@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bolte Pari — English A1 to C2</title>
+<style>
+  :root{
+    --brand:#1E88E5; --brand2:#43A047; --flame:#FF9800;
+    --bg:#14161b; --surface:#1a1d24; --card:#21252e; --card2:#282d38;
+    --fg:#e8e6e1; --muted:#9099a6; --border:#2f3542;
+    --right:#5bb85f; --wrong:#ef6a67; --hard:#ffc06b;
+    --nav-h:62px; --radius:18px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f2efe9; --surface:#faf8f3; --card:#fffdf9; --card2:#efeae1;
+      --fg:#2c2b29; --muted:#6d6a63; --border:#e6e1d7;
+      --right:#2e7d32; --wrong:#c0392b; --hard:#c76a12; }
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Noto Sans Bengali','Kalpurush',system-ui,'Segoe UI',sans-serif;
+    background:var(--bg);color:var(--fg);font-size:16px;line-height:1.65;
+    padding-bottom:calc(var(--nav-h) + 14px)}
+  a{color:var(--brand)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 14px}
+  .hidden{display:none!important}
+
+  /* ===== header ===== */
+  header{position:sticky;top:0;z-index:20;background:var(--surface);
+    border-bottom:1px solid var(--border);padding:10px 0 0}
+  .brandrow{display:flex;align-items:center;gap:10px}
+  .logo{width:38px;height:38px;border-radius:11px;flex:none;
+    background:linear-gradient(160deg,var(--brand),var(--brand2));
+    color:#fff;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 10px rgba(30,136,229,.35)}
+  .brandname{font-weight:800;font-size:1.05rem;line-height:1.2}
+  .brandsub{font-size:.72rem;color:var(--muted);margin-top:-2px}
+  .hchips{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .hchip{background:var(--card2);border:1px solid var(--border);border-radius:20px;
+    padding:4px 12px;font-size:.85rem;font-weight:700;display:flex;gap:5px;align-items:center}
+  .hchip .fl{color:var(--flame)}
+  .allbar{height:5px;background:var(--card2);border-radius:4px;overflow:hidden;margin:10px 0 12px}
+  .allbar>i{display:block;height:100%;width:0;border-radius:4px;
+    background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .4s}
+
+  /* ===== bottom nav ===== */
+  nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:30;height:var(--nav-h);
+    background:var(--surface);border-top:1px solid var(--border);
+    display:flex;justify-content:space-around;align-items:stretch;
+    padding-bottom:env(safe-area-inset-bottom)}
+  .nbtn{flex:1;border:none;background:none;color:var(--muted);font-family:inherit;
+    font-size:.72rem;font-weight:700;cursor:pointer;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;position:relative}
+  .nbtn .ic{font-size:1.35rem;line-height:1}
+  .nbtn.active{color:var(--brand)}
+  .nbtn.active::before{content:"";position:absolute;top:0;width:36px;height:3px;
+    border-radius:0 0 4px 4px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+
+  /* ===== learn tab ===== */
+  .levelbar{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+  .levelbar::-webkit-scrollbar{display:none}
+  .lchip{flex:none;border:1.5px solid var(--border);background:var(--card);color:var(--fg);
+    border-radius:22px;padding:7px 16px;font-size:.9rem;font-weight:700;cursor:pointer}
+  .lchip small{color:var(--muted);font-weight:600}
+  .lchip.active{background:linear-gradient(120deg,var(--brand),var(--brand2));
+    color:#fff;border-color:transparent}
+  .lchip.active small{color:rgba(255,255,255,.85)}
+  .search{width:100%;padding:11px 15px;border-radius:14px;border:1.5px solid var(--border);
+    background:var(--card);color:var(--fg);font-size:.95rem;margin:2px 0 12px;font-family:inherit}
+  .search:focus{outline:none;border-color:var(--brand)}
+  .ulist{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:760px){.ulist{grid-template-columns:1fr 1fr}}
+  @media(min-width:1080px){.ulist{grid-template-columns:1fr 1fr 1fr}}
+  .urow{display:flex;gap:12px;align-items:center;background:var(--card);
+    border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;
+    transition:transform .08s, border-color .15s, box-shadow .15s}
+  .urow:active{transform:scale(.985)}
+  .urow:hover{border-color:var(--brand);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .ring{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--brand2) calc(var(--p)*1%), var(--card2) 0);position:relative}
+  .ring::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--card)}
+  .ring b{position:relative;font-size:.72rem;color:var(--fg)}
+  .ring.done b{font-size:1.05rem;color:var(--right)}
+  .umain{min-width:0;flex:1}
+  .utitle{font-weight:700;font-size:.95rem;line-height:1.4;overflow:hidden;text-overflow:ellipsis;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .usub{font-size:.75rem;color:var(--muted);margin-top:2px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .lvl{font-size:.66rem;font-weight:800;padding:1px 7px;border-radius:6px;
+    background:var(--card2);color:var(--brand)}
+  .rev{font-size:.66rem;font-weight:800;padding:1px 7px;border-radius:6px;background:var(--hard);color:#000}
+  .lock{font-size:.66rem;font-weight:800;padding:1px 7px;border-radius:6px;background:var(--card2);color:var(--muted)}
+  .urow.locked{opacity:.6}
+  .ttsb{background:none;border:none;cursor:pointer;font-size:.95rem;padding:0 3px;opacity:.7;line-height:1;vertical-align:middle}
+  .ttsb:hover{opacity:1}
+  .blank{display:inline-block;min-width:44px;padding:0 7px;margin:0 2px;border-bottom:2.5px solid var(--brand);
+    color:var(--brand);font-weight:700;text-align:center;border-radius:2px}
+  .blank.filled{border-bottom-color:var(--right);color:var(--right)}
+  .chev{color:var(--muted);flex:none;font-size:1.1rem}
+
+  /* ===== practice tab ===== */
+  .sectitle{font-size:1rem;font-weight:800;margin:16px 0 10px}
+  .pcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(min-width:760px){.pcards{grid-template-columns:repeat(4,1fr)}}
+  .pcard{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);
+    padding:14px;cursor:pointer;text-align:center;transition:border-color .15s}
+  .pcard .pic{font-size:1.7rem}
+  .pcard .pt{font-weight:700;font-size:.88rem;margin-top:4px}
+  .pcard .ps{font-size:.7rem;color:var(--muted)}
+  .pcard.on{border-color:var(--right);background:linear-gradient(160deg,rgba(76,175,80,.14),transparent)}
+  .pcard.on .pt::after{content:" ✓";color:var(--right)}
+  .hero{margin-top:14px;border:none;border-radius:20px;width:100%;cursor:pointer;text-align:left;
+    background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;padding:18px;
+    font-family:inherit;box-shadow:0 6px 18px rgba(30,136,229,.3)}
+  .hero h3{margin:0 0 4px;font-size:1.1rem}
+  .hero p{margin:0;font-size:.82rem;opacity:.92}
+  .notecard{background:var(--card);border:1px dashed var(--border);border-radius:var(--radius);
+    padding:12px 14px;font-size:.85rem;color:var(--muted);margin-top:12px}
+  .dots{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  .dot{width:14px;height:14px;border-radius:5px;background:var(--card2);border:1px solid var(--border)}
+  .dot.full{background:var(--right);border-color:var(--right)}
+  .dot.half{background:var(--hard);border-color:var(--hard)}
+  .balline{font-size:.83rem;color:var(--muted)}
+
+  /* ===== progress tab ===== */
+  .streakhero{display:flex;align-items:center;gap:14px;background:var(--card);
+    border:1px solid var(--border);border-radius:20px;padding:16px;margin-bottom:12px}
+  .flamebig{font-size:2.6rem}
+  .streakhero b{font-size:1.6rem}
+  .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(min-width:760px){.statgrid{grid-template-columns:repeat(4,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px;text-align:center}
+  .stat b{display:block;font-size:1.45rem;color:var(--brand)}
+  .stat span{font-size:.75rem;color:var(--muted)}
+  .databtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .btn{background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;border:none;
+    padding:10px 16px;border-radius:13px;cursor:pointer;font-size:.88rem;font-weight:700;font-family:inherit}
+  .btn.ghost{background:var(--card);color:var(--fg);border:1.5px solid var(--border)}
+  .btn.small{padding:7px 12px;font-size:.8rem}
+
+  /* ===== unit view ===== */
+  .topbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 10px}
+  .topbar .ttl{font-weight:800;font-size:1rem;flex:1;min-width:180px}
+  .seg{display:flex;background:var(--card2);border-radius:14px;padding:4px;margin:0 0 12px;gap:4px}
+  .seg button{flex:1;border:none;border-radius:11px;padding:9px 6px;font-family:inherit;
+    font-weight:800;font-size:.9rem;background:none;color:var(--muted);cursor:pointer}
+  .seg button.active{background:var(--card);color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .unitgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+  .learncol{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow-y:auto;padding-right:4px}
+  .learncol::-webkit-scrollbar{width:8px}
+  .learncol::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  @media(max-width:950px){
+    .unitgrid{grid-template-columns:1fr}
+    .learncol{position:static;max-height:none;overflow:visible}
+    body.seg-learn .testcol{display:none}
+    body.seg-test .learncol{display:none}
+  }
+  @media(min-width:951px){.seg{display:none}}
+  .lbox{border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;
+    margin:0 0 12px;background:var(--card)}
+  .lbox h4{margin:0 0 8px;font-size:.95rem;color:var(--brand)}
+  .formula{display:inline-block;background:var(--card2);border:1.5px dashed var(--brand);
+    border-radius:10px;padding:5px 12px;font-family:monospace;color:var(--brand);margin-top:6px;font-size:.88rem}
+  .exgrid{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:1200px){.exgrid{grid-template-columns:1fr 1fr}}
+  .ex{background:var(--card2);border-left:3px solid var(--brand2);border-radius:0 12px 12px 0;padding:8px 12px}
+  .ex .en{font-size:.98rem}
+  .ex .en b{color:var(--right);background:rgba(76,175,80,.14);padding:0 .15em;border-radius:4px}
+  .ex .bn{font-size:.83rem;color:var(--muted);margin-top:2px}
+  .mis{padding:7px 2px;border-bottom:1px dashed var(--border);font-size:.92rem}
+  .mis:last-child{border-bottom:none}
+  .mis .w{color:var(--wrong);text-decoration:line-through}
+  .mis .r{color:var(--right);font-weight:700}
+  .mis .y{display:block;color:var(--muted);font-size:.8rem;margin-top:1px}
+  .diagram{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:10px;margin:0 0 12px;overflow-x:auto;text-align:center}
+  .diagram svg{max-width:100%;height:auto}
+  .q{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:13px 14px;margin:0 0 10px}
+  .q .qt{font-weight:700;margin-bottom:9px;font-size:.95rem}
+  .hardbadge{font-size:.62rem;background:var(--hard);color:#000;padding:1px 6px;border-radius:6px;
+    margin-left:6px;vertical-align:middle;font-weight:800}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .opts.long{grid-template-columns:1fr}
+  @media(max-width:520px){.opts{grid-template-columns:1fr}}
+  .opt{display:block;width:100%;text-align:left;background:var(--card2);border:1.5px solid var(--border);
+    color:var(--fg);padding:9px 12px;border-radius:12px;cursor:pointer;font-size:.92rem;font-family:inherit}
+  .opt:hover{border-color:var(--brand)}
+  .opt.right{background:rgba(76,175,80,.16);border-color:var(--right);color:var(--right);font-weight:700}
+  .opt.wrong{background:rgba(239,83,80,.13);border-color:var(--wrong);color:var(--wrong)}
+  .opt.disabled{cursor:default;opacity:.92}
+  .explain{margin-top:8px;font-size:.85rem;color:var(--muted);display:none;
+    background:var(--card2);border-radius:10px;padding:7px 10px}
+  .explain.show{display:block}
+  .result{font-weight:700;margin:12px 0;padding:13px 15px;border-radius:var(--radius);
+    background:var(--card);border:1.5px solid var(--brand)}
+
+  /* ===== drill ===== */
+  .drillbox{max-width:620px;margin:14px auto;background:var(--card);border:1px solid var(--border);
+    border-radius:22px;padding:20px;text-align:center}
+  .drillq{font-size:1.22rem;font-weight:700;margin:12px 0;line-height:1.55}
+  .drillcount{font-size:3rem;font-weight:800;color:var(--flame)}
+  .drillsay{font-size:1.02rem;color:var(--right);font-weight:700;margin:8px 0}
+  .drillmeta{color:var(--muted);font-size:.82rem}
+  .drillans{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--right);
+    border-radius:12px;padding:10px 13px;margin:12px 0;text-align:left;font-size:.93rem;line-height:1.7}
+  footer{color:var(--muted);font-size:.75rem;text-align:center;padding:22px 12px 8px}
+</style>
+</head>
+<body class="seg-learn">
+
+<header><div class="wrap">
+  <div class="brandrow">
+    <div class="logo">ব</div>
+    <div><div class="brandname">Bolte Pari</div><div class="brandsub">English · A1 → C2</div></div>
+    <div class="hchips">
+      <div class="hchip"><span class="fl">🔥</span><span id="hstreak">0</span></div>
+      <div class="hchip" id="hdone">0/0</div>
+    </div>
+  </div>
+  <div class="allbar"><i id="barfill"></i></div>
+</div></header>
+
+<div class="wrap">
+  <!-- LEARN -->
+  <div id="viewLearn">
+    <div class="levelbar" id="levelbar"></div>
+    <input class="search" id="search" placeholder="🔎 unit খুঁজুন (নাম বা নম্বর)...">
+    <div class="ulist" id="ulist"></div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div id="viewPractice" class="hidden">
+    <div class="sectitle">আজকের practice — শেষ করে টিক দিন</div>
+    <div class="pcards" id="pcards"></div>
+    <button class="hero" id="drillBtn">
+      <h3>🎙️ Interview Drill</h3>
+      <p>Off-script প্রশ্ন · ৫ সেকেন্ড ভাবুন · জোরে উত্তর দিন · নমুনা উত্তর সাথে</p>
+    </button>
+    <div class="notecard">📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন
+      (পরিচয় · গতকাল · কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন।</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="viewProgress" class="hidden">
+    <div class="streakhero">
+      <div class="flamebig">🔥</div>
+      <div><b id="pstreak">0</b> দিনের streak<div class="balline">দিনে ≥৩ টিক হলে streak বাড়ে</div></div>
+    </div>
+    <div class="statgrid" id="statgrid"></div>
+    <div class="sectitle">শেষ ১৪ দিন</div>
+    <div class="dots" id="pdots"></div>
+    <div class="balline" id="pbal"></div>
+    <div class="sectitle">Data</div>
+    <div class="databtns">
+      <button class="btn small" id="exportBtn">⬇️ Progress backup</button>
+      <button class="btn ghost small" id="importBtn">⬆️ Restore</button>
+      <input type="file" id="importFile" class="hidden" accept="application/json">
+      <button class="btn ghost small" id="resetBtn">🗑️ মুছুন</button>
+    </div>
+  </div>
+
+  <!-- UNIT -->
+  <div id="unitView" class="hidden"></div>
+  <!-- DRILL -->
+  <div id="drillView" class="hidden"></div>
+</div>
+
+<footer>Bolte Pari · progress এই device-এ save থাকে — মাঝে মাঝে backup নিন</footer>
+
+<nav class="bottom">
+  <button class="nbtn active" data-v="Learn"><span class="ic">📚</span>শিখুন</button>
+  <button class="nbtn" data-v="Practice"><span class="ic">🎙️</span>প্র্যাকটিস</button>
+  <button class="nbtn" data-v="Progress"><span class="ic">📊</span>অগ্রগতি</button>
+</nav>
+
+<script src="diagrams.js"></script>
+<script src="data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var DATA=(window.STUDY_DATA&&window.STUDY_DATA.units)?window.STUDY_DATA.units:[];
+  var DIAG=window.DIAGRAMS||{};
+  var LEVELS=["A1","A2","B1","B2","C1","C2"];
+  var KEY="study_center_progress_v1";
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}
+  function saveP(p){try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){alert("Progress save হলো না।");}}
+  var progress=load();
+  function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  function today(){return dstr(new Date());}
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function hl(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");}
+  function gapify(html){return html.replace(/_{2,}/g,'<span class="blank">&nbsp;</span>');}
+
+  /* ---------- text-to-speech (free, browser/native engine) ---------- */
+  var _voices=[];
+  function loadVoices(){ try{_voices=(window.speechSynthesis&&window.speechSynthesis.getVoices())||[];}catch(e){_voices=[];} }
+  if(window.speechSynthesis){ loadVoices(); try{window.speechSynthesis.onvoiceschanged=loadVoices;}catch(e){} }
+  var TTS_OK=!!(window.speechSynthesis&&window.SpeechSynthesisUtterance);
+  function speak(text){
+    if(!TTS_OK)return;
+    try{
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(String(text||"").replace(/\*\*/g,"").trim());
+      u.lang="en-US"; u.rate=0.9;
+      var v=_voices.filter(function(x){return /en[-_]US/i.test(x.lang);})[0]||_voices.filter(function(x){return /^en/i.test(x.lang);})[0];
+      if(v)u.voice=v;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function ttsBtn(text){ if(!TTS_OK)return ""; return '<button class="ttsb" data-say="'+esc(text).replace(/"/g,'&quot;')+'" title="শুনুন" aria-label="listen">🔊</button>'; }
+
+  /* ---------- ads bridge (active ONLY inside the published Android app) ---------- */
+  var ADS = (typeof AndroidBridge!=="undefined" && !!AndroidBridge);
+  var _unitsSinceAd=0, _pendingUnlock=null;
+  function maybeInterstitial(){
+    if(!ADS)return;
+    _unitsSinceAd++;
+    if(_unitsSinceAd>=4){ _unitsSinceAd=0; try{AndroidBridge.showInterstitial();}catch(e){} }
+  }
+  function isUnlocked(gi){
+    if(!ADS) return true;
+    if(gi<=0) return true;
+    var id=DATA[gi].id;
+    if(progress._unlocked && progress._unlocked[id]) return true;
+    var prev=progress[DATA[gi-1].id];
+    return !!(prev && prev.done && prev.score && (prev.score.correct/prev.score.total>=0.7));
+  }
+  window.onRewardUnlock=function(){
+    if(!_pendingUnlock)return;
+    if(!progress._unlocked)progress._unlocked={};
+    progress._unlocked[_pendingUnlock]=true; saveP(progress);
+    var id=_pendingUnlock; _pendingUnlock=null;
+    render_list(); openUnit(id);
+  };
+
+  /* ---------- daily tracker ---------- */
+  var PKEYS=[["pr","🔊","উচ্চারণ","03 ফাইলের drill"],["sp","🎤","Speaking","রেকর্ডিং / drill"],
+             ["li","🎧","Listening","আজকের log-সহ"],["mcq","📝","Test","unit test দিলে অটো"]];
+  function daily(){ if(!progress._daily) progress._daily={}; return progress._daily; }
+  function dayRec(ds){ var d=daily(); if(!d[ds]) d[ds]={}; return d[ds]; }
+  function dayCount(ds){ var r=(daily()[ds])||{}; var n=0; PKEYS.forEach(function(k){ if(r[k[0]]) n++; }); return n; }
+  function streak(){
+    var s=0,d=new Date();
+    if(dayCount(dstr(d))<3) d.setDate(d.getDate()-1);
+    while(dayCount(dstr(d))>=3){ s++; d.setDate(d.getDate()-1); }
+    return s;
+  }
+  function autoMark(k){ var r=dayRec(today()); if(!r[k]){ r[k]=true; saveP(progress); render_practice(); render_header(); } }
+
+  /* ---------- header ---------- */
+  function render_header(){
+    var total=DATA.length,done=0;
+    DATA.forEach(function(u){var pr=progress[u.id];if(pr&&pr.done)done++;});
+    document.getElementById("hstreak").textContent=streak();
+    document.getElementById("hdone").textContent=done+"/"+total;
+    document.getElementById("barfill").style.width=(total?Math.round(done/total*100):0)+"%";
+  }
+
+  /* ---------- tabs / navigation ---------- */
+  var views=["Learn","Practice","Progress"];
+  function showTab(name){
+    views.forEach(function(v){document.getElementById("view"+v).classList.toggle("hidden",v!==name);});
+    document.getElementById("unitView").classList.add("hidden");
+    document.getElementById("drillView").classList.add("hidden");
+    stopDrillTimer();
+    Array.prototype.forEach.call(document.querySelectorAll(".nbtn"),function(b){
+      b.classList.toggle("active",b.getAttribute("data-v")===name);
+    });
+    if(name==="Learn"){render_list();}
+    if(name==="Practice"){render_practice();}
+    if(name==="Progress"){render_progress();}
+    render_header();
+    window.scrollTo(0,0);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".nbtn"),function(b){
+    b.onclick=function(){showTab(b.getAttribute("data-v"));};
+  });
+
+  /* ---------- learn tab ---------- */
+  var activeLevel="ALL";
+  function render_levelbar(){
+    var counts={ALL:DATA.length};
+    LEVELS.forEach(function(L){counts[L]=DATA.filter(function(u){return u.level===L;}).length;});
+    var el=document.getElementById("levelbar");
+    var html='<div class="lchip'+(activeLevel==="ALL"?' active':'')+'" data-l="ALL">সব <small>'+counts.ALL+'</small></div>';
+    LEVELS.forEach(function(L){ if(counts[L]) html+='<div class="lchip'+(activeLevel===L?' active':'')+'" data-l="'+L+'">'+L+' <small>'+counts[L]+'</small></div>'; });
+    el.innerHTML=html;
+    Array.prototype.forEach.call(el.querySelectorAll(".lchip"),function(c){
+      c.onclick=function(){activeLevel=c.getAttribute("data-l");render_levelbar();render_list();};
+    });
+  }
+  function render_list(){
+    var q=(document.getElementById("search").value||"").toLowerCase();
+    var list=DATA.filter(function(u){
+      if(activeLevel!=="ALL"&&u.level!==activeLevel)return false;
+      if(q)return (u.title+" "+u.id+" "+(u.ref||"")).toLowerCase().indexOf(q)>=0;
+      return true;
+    });
+    var el=document.getElementById("ulist");
+    if(!list.length){el.innerHTML='<p style="color:var(--muted)">কিছু পাওয়া যায়নি।</p>';return;}
+    el.innerHTML=list.map(function(u){
+      var pr=progress[u.id]||{};
+      var pct=pr.score?Math.round(pr.score.correct/pr.score.total*100):(pr.done?100:0);
+      var ringCls=pr.done?"ring done":"ring";
+      var ringIn=pr.done?"✓":(pr.score?pct+"":"");
+      var rev="";
+      if(pr.done){
+        var old=pr.date&&((new Date(today())-new Date(pr.date))/86400000>30);
+        var low=pr.score&&(pr.score.correct/pr.score.total<0.7);
+        if(old||low)rev='<span class="rev">🔁 আবার</span>';
+      }
+      var locked=!isUnlocked(DATA.indexOf(u));
+      var lockb=locked?'<span class="lock">🔒 locked</span>':'';
+      var meta='<span class="lvl">'+u.level+'</span><span>'+u.id+'</span><span>'+(u.test?u.test.length:0)+' প্রশ্ন</span>'+
+        (u.diagram?'<span>🖼️</span>':'')+rev+lockb+(pr.done&&pr.date?'<span>📅 '+pr.date+'</span>':'');
+      return '<div class="urow'+(locked?' locked':'')+'" data-id="'+u.id+'" data-locked="'+(locked?1:0)+'">'+
+        '<div class="'+ringCls+'" style="--p:'+pct+'"><b>'+(locked?"🔒":ringIn)+'</b></div>'+
+        '<div class="umain"><div class="utitle">'+esc(u.title)+'</div><div class="usub">'+meta+'</div></div>'+
+        '<div class="chev">›</div></div>';
+    }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".urow"),function(c){
+      c.onclick=function(){
+        var id=c.getAttribute("data-id");
+        if(c.getAttribute("data-locked")==="1"){
+          _pendingUnlock=id;
+          if(confirm("এই unit এখনো locked। আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে।\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
+            try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
+          }
+          return;
+        }
+        openUnit(id);
+      };
+    });
+  }
+  document.getElementById("search").oninput=render_list;
+
+  /* ---------- practice tab ---------- */
+  function render_practice(){
+    var el=document.getElementById("pcards"); if(!el)return;
+    var rec=dayRec(today());
+    el.innerHTML=PKEYS.map(function(k){
+      return '<div class="pcard'+(rec[k[0]]?' on':'')+'" data-k="'+k[0]+'">'+
+        '<div class="pic">'+k[1]+'</div><div class="pt">'+k[2]+'</div><div class="ps">'+k[3]+'</div></div>';
+    }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".pcard"),function(c){
+      c.onclick=function(){
+        var k=c.getAttribute("data-k");
+        var r=dayRec(today()); r[k]=!r[k]; saveP(progress);
+        render_practice(); render_header();
+      };
+    });
+  }
+
+  /* ---------- progress tab ---------- */
+  function render_progress(){
+    var total=DATA.length,done=0,tested=0,days={};
+    DATA.forEach(function(u){var pr=progress[u.id];
+      if(pr&&pr.done){done++;if(pr.date)days[pr.date]=1;} if(pr&&pr.score)tested++;});
+    document.getElementById("pstreak").textContent=streak();
+    document.getElementById("statgrid").innerHTML=
+      st(done+" / "+total,"unit পড়া")+st((total?Math.round(done/total*100):0)+"%","সম্পূর্ণ")+
+      st(tested,"test দেওয়া")+st(Object.keys(days).length,"দিন পড়েছেন");
+    var dots="",d=new Date(); d.setDate(d.getDate()-13);
+    for(var i=0;i<14;i++){var c=dayCount(dstr(d));
+      dots+='<span class="dot'+(c>=3?' full':(c>=1?' half':''))+'" title="'+dstr(d)+': '+c+'/4"></span>';
+      d.setDate(d.getDate()+1);}
+    document.getElementById("pdots").innerHTML=dots;
+    var w=new Date(),tD=0,sD=0;
+    for(var j=0;j<7;j++){var r=(daily()[dstr(w)])||{};if(r.mcq)tD++;if(r.sp)sD++;w.setDate(w.getDate()-1);}
+    document.getElementById("pbal").innerHTML="এই ৭ দিনে: test "+tD+" দিন · speaking "+sD+" দিন"+
+      ((tD-sD>=3)?' <b style="color:var(--hard)">⚠️ মুখে বলাটাই আসল!</b>':'');
+  }
+  function st(b,s){return '<div class="stat"><b>'+b+'</b><span>'+s+'</span></div>';}
+
+  /* ---------- unit view ---------- */
+  function openUnit(id){
+    var u=DATA.filter(function(x){return x.id===id;})[0];if(!u)return;
+    try{history.pushState({v:'unit'},'');}catch(e){}
+    window.scrollTo(0,0);
+    views.forEach(function(v){document.getElementById("view"+v).classList.add("hidden");});
+    document.body.classList.remove("seg-test");document.body.classList.add("seg-learn");
+    var v=document.getElementById("unitView");v.classList.remove("hidden");
+    var pr=progress[id]||{};
+
+    var learn="";
+    if(u.explain) learn+='<div class="lbox"><h4>🧠 কীভাবে কাজ করে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
+      (u.form?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
+    if(u.diagram&&DIAG[u.diagram]) learn+='<div class="diagram">'+DIAG[u.diagram]+'</div>';
+    if(u.notes&&u.notes.length) learn+='<div class="lbox"><h4>📌 মূল নিয়ম</h4><ul style="margin:0;padding-left:1.2rem">'+
+      u.notes.map(function(n){return '<li>'+hl(n)+'</li>';}).join("")+'</ul></div>';
+    if(u.examples&&u.examples.length){
+      learn+='<div class="lbox"><h4>✨ উদাহরণ</h4><div class="exgrid">'+
+        u.examples.map(function(e){var en=typeof e==="string"?e:e.en;var bn=(e&&e.bn)?e.bn:"";
+          return '<div class="ex"><div class="en">'+hl(en)+' '+ttsBtn(en)+'</div>'+(bn?'<div class="bn">'+esc(bn)+'</div>':'')+'</div>';}).join("")+'</div></div>';
+    }
+    if(u.mistakes&&u.mistakes.length){
+      learn+='<div class="lbox"><h4>⚠️ সাধারণ ভুল</h4>'+
+        u.mistakes.map(function(m){return '<div class="mis"><span class="w">'+esc(m.wrong)+'</span> → <span class="r">'+esc(m.right)+'</span>'+
+          (m.why?'<span class="y">💡 '+esc(m.why)+'</span>':'')+'</div>';}).join("")+'</div>';
+    }
+
+    var testh=(u.test||[]).map(function(qq,qi){
+      var badge=(qq.level==="hard"||qq.hard)?'<span class="hardbadge">HARD</span>':'';
+      var longOpts=qq.options.some(function(o){return o.length>28;});
+      return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+badge+'</div>'+
+        '<div class="opts'+(longOpts?' long':'')+'">'+
+        qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
+        '</div><div class="explain" id="ex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
+    }).join("")+'<div class="result hidden" id="result"></div>';
+
+    v.innerHTML='<div class="topbar">'+
+      '<button class="btn ghost small" id="backBtn">←</button>'+
+      '<span class="lvl">'+u.level+'</span><span class="ttl">'+esc(u.title)+'</span>'+
+      '<button class="btn small" id="doneBtn">'+(pr.done?'✅ '+pr.date:'📅 আজ পড়েছি')+'</button></div>'+
+      '<div class="seg"><button id="segL" class="active">📖 শেখা</button><button id="segT">📝 টেস্ট ('+(u.test?u.test.length:0)+')</button></div>'+
+      '<div class="unitgrid"><div class="learncol">'+learn+'</div><div class="testcol">'+testh+'</div></div>';
+
+    document.getElementById("backBtn").onclick=function(){history.back();};
+    document.getElementById("doneBtn").onclick=function(){markDone(id);};
+    document.getElementById("segL").onclick=function(){
+      document.body.classList.add("seg-learn");document.body.classList.remove("seg-test");
+      this.classList.add("active");document.getElementById("segT").classList.remove("active");window.scrollTo(0,0);};
+    document.getElementById("segT").onclick=function(){
+      document.body.classList.add("seg-test");document.body.classList.remove("seg-learn");
+      this.classList.add("active");document.getElementById("segL").classList.remove("active");window.scrollTo(0,0);};
+
+    var answered={};
+    Array.prototype.forEach.call(v.querySelectorAll(".q"),function(qEl){
+      var qi=+qEl.getAttribute("data-qi");var correct=u.test[qi].answer;
+      Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(btn){
+        btn.onclick=function(){
+          if(answered[qi]!==undefined)return;
+          var oi=+btn.getAttribute("data-oi");answered[qi]=(oi===correct);
+          Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(b){b.classList.add("disabled");
+            var bi=+b.getAttribute("data-oi");if(bi===correct)b.classList.add("right");else if(bi===oi)b.classList.add("wrong");});
+          var _bl=qEl.querySelector(".blank");if(_bl){_bl.textContent=u.test[qi].options[correct];_bl.classList.add("filled");}
+          document.getElementById("ex_"+qi).classList.add("show");updateResult();
+        };
+      });
+    });
+    function updateResult(){
+      var keys=Object.keys(answered);if(keys.length<u.test.length)return;
+      var cc=keys.filter(function(k){return answered[k];}).length;
+      var r=document.getElementById("result");r.classList.remove("hidden");
+      r.innerHTML='🎯 ফল: '+cc+' / '+u.test.length+' সঠিক। '+
+        (cc===u.test.length?'দারুণ! 💯':(cc>=u.test.length*0.7?'ভালো! revise করুন।':'নিয়মটা আবার পড়ে চেষ্টা করুন।'));
+      var p=progress[id]||{};p.score={correct:cc,total:u.test.length};if(!p.done){p.done=true;p.date=today();}
+      progress[id]=p;saveP(progress);autoMark("mcq");
+      var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
+      render_header();
+      maybeInterstitial();
+    }
+  }
+  function markDone(id){
+    var p=progress[id]||{};p.done=true;if(!p.date)p.date=today();progress[id]=p;saveP(progress);
+    var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
+    render_header();
+  }
+
+  /* ---------- interview drill ---------- */
+  var IQ=[
+    {q:"Tell me about yourself.", a:"My name is [name]. I'm [age] years old, from [city], and I work as a [job]. I'm here to apply for a [student/work] visa."},
+    {q:"What is the purpose of your trip?", a:"I'm going to [study a master's in X / work as a Y] at [institution] in [city]."},
+    {q:"Why did you choose this country and not another one?", a:"[Country] is strong in my field, and [institution] offers exactly the program I need. The costs also fit my budget."},
+    {q:"Why this university or company?", a:"It has a good reputation in [field], and the program matches my background. I compared several options and this was the best fit."},
+    {q:"Explain what you actually do, in simple words.", a:"I [find security problems in software] so companies can [fix them before criminals use them]. In simple words, I [test systems to keep them safe]."},
+    {q:"How long have you been doing this work?", a:"I have been working in this field for [X] years, since [year]."},
+    {q:"Why did you choose this field?", a:"I have always enjoyed [solving problems / computers]. I started learning it in [year] and turned it into my profession."},
+    {q:"You could study the same subject in your country — why go abroad?", a:"The program at [institution] offers [labs/professors/industry links] that are not available at home. International experience will also strengthen my career."},
+    {q:"How did you find this university or company?", a:"I researched programs online, compared rankings and courses, and contacted them through their official website."},
+    {q:"Name two other universities you considered. Why not those?", a:"I also considered [A] and [B]. I chose [this one] because [tuition/program/city] suited me better."},
+    {q:"What exactly will you study in the first semester?", a:"The first semester covers [course 1], [course 2], and [course 3], according to the program plan."},
+    {q:"What is your program coordinator's name?", a:"The coordinator is [name]. I contacted the office by email during my application."},
+    {q:"What will you do if you fail a course?", a:"The university allows a retake. I would take it seriously, but I plan to work hard so it doesn't happen."},
+    {q:"What will your exact responsibilities be?", a:"I will be responsible for [main tasks]. My employer explained this in the offer letter."},
+    {q:"Why would they hire you instead of a local candidate?", a:"I have [X years] of specific experience in [skill], which is hard to find. They tested my skills before offering the job."},
+    {q:"What will your salary be? Is that enough to live there?", a:"My salary will be [amount] per [month/year]. I checked the living costs in [city], and it is enough."},
+    {q:"How will you finance your stay?", a:"Through [my savings / a scholarship / my sponsor]. I have [amount] in my account, as shown in my documents."},
+    {q:"Why would your sponsor spend this much money on you?", a:"He is my [relation] and has supported my education before. He earns enough, and this is an investment in the family's future."},
+    {q:"What does your sponsor do? What is his monthly income?", a:"He is a [profession]. His monthly income is about [amount], as shown in the bank documents."},
+    {q:"How much is your tuition per year? And living costs?", a:"Tuition is [amount] per year, and living costs are about [amount] per month. I planned my budget for the full period."},
+    {q:"Where will you stay? What is the address?", a:"I will stay in [a student dormitory / a rented apartment] at [address], in [city]."},
+    {q:"How much is the rent? How far is it from your campus?", a:"The rent is [amount] per month, and it's about [X minutes] from campus by [bus/walk]."},
+    {q:"Will you come back? Why?", a:"Yes. My family and my [job/property] are here, and my plan is to use my new skills in my career at home."},
+    {q:"Your field pays much more there — why would you return?", a:"Money is not my only goal. With this degree and experience, I can build something better here, close to my family."},
+    {q:"What exactly will you do here after you return?", a:"I plan to [rejoin my field / start a business / apply my skills at a better position] here."},
+    {q:"What ties do you have to your home country?", a:"My parents and family live here, and I have [a job / property / responsibilities] to return to."},
+    {q:"Do you plan to work there after finishing your studies?", a:"My focus is my studies. If the visa rules allow part-time work, I may do it legally, but my main plan is to finish my degree."},
+    {q:"Do you have relatives in that country?", a:"[Yes, my (relation) lives in (city). / No, I don't have any relatives there.] (যা সত্য তাই বলুন)"},
+    {q:"Have you ever been refused a visa by any country?", a:"[No, never. / Yes, once by (country) in (year), because (reason). I have fixed that issue in this application.] (সত্যটাই বলুন — record থাকে)"},
+    {q:"Who filled out your application form?", a:"[I filled it out myself. / An authorized agency helped me, but I checked all the information.] Everything in it is correct."},
+    {q:"You seem nervous — why?", a:"It's an important day for me, so I'm a little nervous. But I'm happy to answer your questions."},
+    {q:"What will you do if I refuse your visa today?", a:"I would accept your decision, find out the reason, improve my application, and apply again."},
+    {q:"Have you traveled abroad before?", a:"[Yes, I visited (country) in (year) for (reason). / No, this will be my first trip abroad.]"},
+    {q:"What do you know about the city you are going to?", a:"[City] is known for [university/industry]. I've read about the transport, the weather, and the living costs there."},
+    {q:"How is your English? Do you speak the local language?", a:"I can communicate well in English, and I've started learning basic [local language] for daily life."},
+    {q:"When are you planning to leave?", a:"I plan to leave on [date], before my [program/contract] starts on [date]."},
+    {q:"How long will you stay?", a:"For [X years], the length of my [program/contract]. My visa application matches this period."},
+    {q:"Have you booked your tickets yet?", a:"Not yet — I will book as soon as my visa is approved."},
+    {q:"What did you do yesterday?", a:"Yesterday I [worked / prepared my documents], and in the evening I [spent time with my family]."},
+    {q:"Is there anything you would like to add?", a:"Only that my plans are genuine and all my documents are complete. Thank you for your time."}
+  ];
+  var drillTimer=null;
+  function stopDrillTimer(){ if(drillTimer){clearInterval(drillTimer);drillTimer=null;} }
+  function drillWeights(){ if(!progress._drill) progress._drill={}; return progress._drill; }
+  function pickQuestions(n){
+    var w=drillWeights();
+    var pool=IQ.map(function(item,i){return {i:i,q:item.q,a:item.a,wt:1+(w[i]||0)*2};});
+    var out=[];
+    while(out.length<n && pool.length){
+      var total=pool.reduce(function(s,p){return s+p.wt;},0);
+      var r=Math.random()*total;
+      for(var k=0;k<pool.length;k++){ r-=pool[k].wt; if(r<=0){ out.push(pool[k]); pool.splice(k,1); break; } }
+    }
+    return out;
+  }
+  function openDrill(){
+    try{history.pushState({v:'drill'},'');}catch(e){}
+    views.forEach(function(vn){document.getElementById("view"+vn).classList.add("hidden");});
+    document.getElementById("unitView").classList.add("hidden");
+    var v=document.getElementById("drillView"); v.classList.remove("hidden");
+    window.scrollTo(0,0);
+    var qs=pickQuestions(10), idx=0, smooth=0;
+    function show(){
+      stopDrillTimer();
+      if(idx>=qs.length){
+        v.innerHTML='<div class="drillbox"><h3>🎯 Drill শেষ</h3>'+
+          '<p>মসৃণ উত্তর: <b style="color:var(--right)">'+smooth+'</b> / '+qs.length+'</p>'+
+          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে। 🎤 Speaking-এর টিক পড়ে গেছে।</p>'+
+          '<button class="btn" id="drillAgain">আবার ১০টা</button> <button class="btn ghost" id="drillExit">← ফিরে যাই</button></div>';
+        autoMark("sp");
+        document.getElementById("drillAgain").onclick=openDrill;
+        document.getElementById("drillExit").onclick=function(){history.back();};
+        return;
+      }
+      var item=qs[idx], left=5;
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+qs.length+' · ভাবার সময় ৫ সেকেন্ড, তারপর জোরে উত্তর</div>'+
+        '<div class="drillq">'+esc(item.q)+' '+ttsBtn(item.q)+'</div>'+
+        '<div class="drillcount" id="dc">5</div>'+
+        '<div id="dctl"><button class="btn ghost small" id="drillStop">বন্ধ করি</button></div></div>';
+      document.getElementById("drillStop").onclick=function(){history.back();};
+      drillTimer=setInterval(function(){
+        left--;
+        var dc=document.getElementById("dc"); if(!dc){stopDrillTimer();return;}
+        if(left>0){ dc.textContent=left; return; }
+        stopDrillTimer();
+        dc.outerHTML='<div class="drillsay">🎤 এখন উত্তর বলুন — ২-৩ বাক্য, তারপর থামুন।</div>';
+        document.getElementById("dctl").innerHTML=
+          '<div class="drillans">💡 <b>নমুনা উত্তর</b> (নিজের সত্য তথ্য [ ]-এ বসান): '+ttsBtn(item.a||"")+'<br>'+esc(item.a||"")+'</div>'+
+          '<button class="btn" id="dok">✅ পেরেছি</button> <button class="btn ghost" id="dno">😵 আটকেছি</button>';
+        document.getElementById("dok").onclick=function(){ smooth++; idx++; show(); };
+        document.getElementById("dno").onclick=function(){
+          var w=drillWeights(); w[item.i]=(w[item.i]||0)+1; saveP(progress); idx++; show();
+        };
+      },1000);
+    }
+    show();
+  }
+  document.getElementById("drillBtn").onclick=openDrill;
+
+  /* ---------- data buttons ---------- */
+  document.getElementById("exportBtn").onclick=function(){
+    var blob=new Blob([JSON.stringify(progress,null,2)],{type:"application/json"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="boltepari_progress_"+today()+".json";a.click();
+  };
+  document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
+  document.getElementById("importFile").onchange=function(e){
+    var f=e.target.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{progress=JSON.parse(r.result);saveP(progress);showTab("Progress");alert("Restore হয়েছে ✅");}catch(err){alert("ফাইল পড়া গেল না।");}};
+    r.readAsText(f);
+  };
+  document.getElementById("resetBtn").onclick=function(){
+    if(confirm("সব progress মুছে যাবে — নিশ্চিত?")){progress={};saveP(progress);showTab("Progress");}
+  };
+
+  /* ---------- global speaker-button handler ---------- */
+  document.addEventListener("click",function(e){
+    var t=e.target;
+    var b=(t.classList&&t.classList.contains("ttsb"))?t:(t.closest?t.closest(".ttsb"):null);
+    if(b){ e.preventDefault(); e.stopPropagation(); speak(b.getAttribute("data-say")); }
+  },true);
+
+  /* ---------- Android hardware back button (SPA history) ---------- */
+  window.addEventListener("popstate",function(){
+    var dv=document.getElementById("drillView"), uv=document.getElementById("unitView");
+    if(dv&&!dv.classList.contains("hidden")){ stopDrillTimer(); showTab("Practice"); }
+    else if(uv&&!uv.classList.contains("hidden")){ showTab("Learn"); }
+  });
+
+  /* ---------- init ---------- */
+  if(!DATA.length)document.getElementById("ulist").innerHTML='<p style="color:var(--muted)">data.js খালি।</p>';
+  render_levelbar(); render_list(); render_header();
+})();
+</script>
+</body>
+</html>
