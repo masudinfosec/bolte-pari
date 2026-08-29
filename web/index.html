@@ -497,7 +497,7 @@
 
     var learn="";
     if(u.explain) learn+='<div class="lbox"><h4>🧠 কীভাবে কাজ করে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
-      (u.form?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
+      ((u.form&&!u.patterns)?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
     if(u.patterns){
       var P=u.patterns;
       function prow(lbl,p){return '<tr><td class="pl">'+lbl+'</td><td><div class="en">'+esc(p.en)+' '+ttsBtn(p.en)+'</div><div class="bn">'+esc(p.bn)+'</div></td></tr>';}
