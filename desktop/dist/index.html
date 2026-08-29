@@ -275,7 +275,7 @@
   <div id="drillView" class="hidden"></div>
 </div>
 
-<footer>Bolte Pari · progress এই device-এ save থাকে — মাঝে মাঝে backup নিন</footer>
+<footer>Bolte Pari · progress এই 'device' এ save থাকে — মাঝে মাঝে backup নিন</footer>
 
 <nav class="bottom">
   <button class="nbtn active" data-v="Learn"><span class="ic">📚</span>শিখুন</button>
@@ -437,7 +437,7 @@
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
           _pendingUnlock=id;
-          if(confirm("এই unit এখনো locked. আগের unit-এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
+          if(confirm("এই unit এখনো locked. আগের 'unit' এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
             try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
           }
           return;
@@ -646,7 +646,7 @@
       if(idx>=qs.length){
         v.innerHTML='<div class="drillbox"><h3>🎯 Drill শেষ</h3>'+
           '<p>মসৃণ উত্তর: <b style="color:var(--right)">'+smooth+'</b> / '+qs.length+'</p>'+
-          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে. 🎤 Speaking-এর টিক পড়ে গেছে.</p>'+
+          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে. 🎤 Speaking এর টিক পড়ে গেছে.</p>'+
           '<button class="btn" id="drillAgain">আবার ১০টা</button> <button class="btn ghost" id="drillExit">← ফিরে যাই</button></div>';
         autoMark("sp");
         document.getElementById("drillAgain").onclick=openDrill;
@@ -687,19 +687,19 @@
     window.scrollTo(0,0); return v;
   }
   var PRON=[
-    {w:"ship — sheep", tip:"ship-এ i ছোট্ট করে; sheep-এ ee টেনে লম্বা."},
+    {w:"ship — sheep", tip:"'ship' এ i ছোট্ট করে; 'sheep' এ ee টেনে লম্বা."},
     {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়."},
-    {w:"very — wary", tip:"v-তে উপরের দাঁত নিচের ঠোঁটে লাগান; w-তে ঠোঁট গোল, দাঁত লাগবে না."},
+    {w:"very — wary", tip:"'v' তে উপরের দাঁত নিচের ঠোঁটে লাগান; 'w' তে ঠোঁট গোল, দাঁত লাগবে না."},
     {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ."},
-    {w:"pull — full", tip:"p-তে বাতাসের ধাক্কা (কাগজ নড়বে); f-তে দাঁত-ঠোঁটে বাতাস."},
+    {w:"pull — full", tip:"'p' তে বাতাসের ধাক্কা (কাগজ নড়বে); 'f' তে দাঁত-ঠোঁটে বাতাস."},
     {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে. হাত মুখের সামনে রেখে পরখ করুন."},
-    {w:"see — she", tip:"s সাপের শব্দ; sh-তে ঠোঁট এগিয়ে ‘শ’."},
-    {w:"sip — zip", tip:"s-এ গলা কাঁপে না; z-এ গলায় হাত দিলে কাঁপুনি টের পাবেন."},
-    {w:"think — sink", tip:"th-তে জিভের ডগা দাঁতের ফাঁকে; s-এ জিভ ভেতরে."},
-    {w:"they — day", tip:"they-র th নরম কাঁপা শব্দ; day-তে জিভ দাঁতের পেছনে ঠোকা."},
-    {w:"cat — cut — cart", tip:"cat-এ অ্যা; cut-এ ছোট আ; cart-এ লম্বা আ-র."},
-    {w:"walk — work", tip:"walk-এ ‘ওয়াক’ (l নীরব); work-এ ‘ওয়ার্ক’ — er শব্দ."},
-    {w:"heart — hurt", tip:"heart-এ লম্বা আ; hurt-এ er — দুটোই r আছে কিন্তু স্বর আলাদা."},
+    {w:"see — she", tip:"s সাপের শব্দ; 'sh' তে ঠোঁট এগিয়ে ‘শ’."},
+    {w:"sip — zip", tip:"'s' এ গলা কাঁপে না; 'z' এ গলায় হাত দিলে কাঁপুনি টের পাবেন."},
+    {w:"think — sink", tip:"'th' তে জিভের ডগা দাঁতের ফাঁকে; 's' এ জিভ ভেতরে."},
+    {w:"they — day", tip:"'they' র th নরম কাঁপা শব্দ; 'day' তে জিভ দাঁতের পেছনে ঠোকা."},
+    {w:"cat — cut — cart", tip:"'cat' এ অ্যা; 'cut' এ ছোট আ; 'cart' এ লম্বা আ-র."},
+    {w:"walk — work", tip:"'walk' এ ‘ওয়াক’ (l নীরব); 'work' এ ‘ওয়ার্ক’ — er শব্দ."},
+    {w:"heart — hurt", tip:"'heart' এ লম্বা আ; 'hurt' এ er — দুটোই r আছে কিন্তু স্বর আলাদা."},
     {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)."},
     {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)."},
     {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না."},
@@ -710,7 +710,7 @@
     {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না."},
     {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়."},
     {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়."},
-    {w:"world — word", tip:"world-এ r+l দুটোই; word-এ শুধু er-ড."}
+    {w:"world — word", tip:"'world' এ r+l দুটোই; 'word' এ শুধু 'er' ড."}
   ];
   function openPron(){
     var v=engineView();
