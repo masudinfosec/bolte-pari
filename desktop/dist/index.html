@@ -114,6 +114,7 @@
   .contcard .cl{font-size:.72rem;opacity:.9;font-weight:700;letter-spacing:.04em}
   .contcard .ct{font-weight:800;font-size:1rem;line-height:1.35;margin-top:1px}
   .contcard .cg{font-size:.75rem;opacity:.92;margin-top:2px}
+  .wkcard{background:linear-gradient(120deg,#f5842f,#e0491b);box-shadow:0 6px 18px rgba(224,73,27,.3)}
   .chap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
     margin:0 0 10px;overflow:hidden}
   .chaphead{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
@@ -257,6 +258,9 @@
   .explain.show{display:block}
   .result{font-weight:700;margin:12px 0;padding:13px 15px;border-radius:var(--radius);
     background:var(--card);border:1.5px solid var(--brand)}
+  .wrote{background:rgba(239,83,80,.10);border:1px solid var(--wrong);border-radius:12px;padding:9px 12px;margin:8px 0}
+  .wrote .wrn{font-size:.85rem;font-weight:600;color:var(--wrong)}
+  .wrote .wrs{font-size:1rem;font-weight:700;margin-top:4px}
 
   /* ===== drill ===== */
   .drillbox{max-width:620px;margin:14px auto;background:var(--card);border:1px solid var(--border);
@@ -399,11 +403,24 @@
 
   /* ---------- ads bridge (active ONLY inside the published Android app) ---------- */
   var ADS = (typeof AndroidBridge!=="undefined" && !!AndroidBridge);
-  var _unitsSinceAd=0, _pendingUnlock=null;
+  var _unitsSinceAd=0, _pendingUnlock=null, _unlockGot=0;
+  var UNLOCK_VIDEOS=2;
   function maybeInterstitial(){
     if(!ADS)return;
     _unitsSinceAd++;
     if(_unitsSinceAd>=4){ _unitsSinceAd=0; try{AndroidBridge.showInterstitial();}catch(e){} }
+  }
+  function startUnlock(id){
+    _pendingUnlock=id; _unlockGot=0;
+    if(!ADS){ doUnlock(); return; }
+    try{ AndroidBridge.showRewarded('onRewardUnlock'); }catch(e){ doUnlock(); }
+  }
+  function doUnlock(){
+    if(!_pendingUnlock)return;
+    if(!progress._unlocked)progress._unlocked={};
+    progress._unlocked[_pendingUnlock]=true; saveP(progress);
+    var id=_pendingUnlock; _pendingUnlock=null; _unlockGot=0;
+    render_list(); openUnit(id);
   }
   function isUnlocked(gi){
     if(!ADS) return true;
@@ -411,14 +428,16 @@
     var id=DATA[gi].id;
     if(progress._unlocked && progress._unlocked[id]) return true;
     var prev=progress[DATA[gi-1].id];
-    return !!(prev && prev.done && prev.score && (prev.score.correct/prev.score.total>=0.7));
+    var prevPass = !!(prev && (prev.passed || (prev.score && prev.score.correct/prev.score.total>=0.9)));
+    if(!prevPass) return false;
+    // group boundary: previous week's exam must be passed to start a new 7-unit block
+    if(gi%7===0){ var k=(gi/7)-1; if(k>=0 && (gi<DATA.length) && !weeklyPassed(k)) return false; }
+    return true;
   }
   window.onRewardUnlock=function(){
-    if(!_pendingUnlock)return;
-    if(!progress._unlocked)progress._unlocked={};
-    progress._unlocked[_pendingUnlock]=true; saveP(progress);
-    var id=_pendingUnlock; _pendingUnlock=null;
-    render_list(); openUnit(id);
+    _unlockGot++;
+    if(_unlockGot<UNLOCK_VIDEOS){ setTimeout(function(){ try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){ doUnlock(); } },300); }
+    else { doUnlock(); }
   };
 
   /* ---------- daily tracker ---------- */
@@ -489,20 +508,25 @@
     var el=document.getElementById("contwrap"); if(!el)return;
     var u=nextUnit(); if(!u){el.innerHTML="";return;}
     var done=0; DATA.forEach(function(x){var p=progress[x.id];if(p&&p.done)done++;});
-    el.innerHTML='<button class="contcard" id="contBtn"><span class="ci">'+(done===0?"🚀":"▶️")+'</span>'+
+    var wk=firstReadyWeekly();
+    var wkHtml=(wk>=0)?'<button class="contcard wkcard" id="wkBtn"><span class="ci">📅</span>'+
+      '<span class="cm"><span class="cl">সাপ্তাহিক পরীক্ষা '+(wk+1)+'</span>'+
+      '<div class="ct">৭টি ইউনিট শেষ! এবার পরীক্ষা দিন</div>'+
+      '<div class="cg">পাস করলে পরের সপ্তাহ খুলবে</div></span></button>':'';
+    el.innerHTML=wkHtml+'<button class="contcard" id="contBtn"><span class="ci">'+(done===0?"🚀":"▶️")+'</span>'+
       '<span class="cm"><span class="cl">'+(done===0?"শুরু করুন":"চালিয়ে যান")+'</span>'+
       '<div class="ct">'+esc(u.title)+'</div>'+
       '<div class="cg">'+u.level+' , '+u.id+' , '+done+'/'+DATA.length+' unit শেষ</div></span></button>';
     document.getElementById("contBtn").onclick=function(){ openUnit(u.id); };
+    if(wk>=0){ document.getElementById("wkBtn").onclick=function(){ openWeekly(wk); }; }
   }
   function bindUnitRows(scope){
     Array.prototype.forEach.call(scope.querySelectorAll(".urow"),function(c){
       c.onclick=function(){
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
-          _pendingUnlock=id;
-          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
-            try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
+          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?")){
+            startUnlock(id);
           }
           return;
         }
@@ -590,9 +614,8 @@
       c.onclick=function(){
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
-          _pendingUnlock=id;
-          if(confirm("এই unit এখনো locked. আগের 'unit' এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
-            try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
+          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?")){
+            startUnlock(id);
           }
           return;
         }
@@ -681,21 +704,12 @@
           (m.why?'<span class="y">💡 '+esc(m.why)+'</span>':'')+'</div>';}).join("")+'</div>';
     }
 
-    var testh=(u.test||[]).map(function(qq,qi){
-      var badge=(qq.level==="hard"||qq.hard)?'<span class="hardbadge">HARD</span>':'';
-      var longOpts=qq.options.some(function(o){return o.length>28;});
-      return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+badge+'</div>'+
-        '<div class="opts'+(longOpts?' long':'')+'">'+
-        qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
-        '</div><div class="explain" id="ex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
-    }).join("")+'<div class="result hidden" id="result"></div>';
-
     v.innerHTML='<div class="topbar">'+
       '<button class="btn ghost small" id="backBtn">←</button>'+
       '<span class="lvl">'+u.level+'</span><span class="ttl">'+esc(u.title)+'</span>'+
       '<button class="btn small" id="doneBtn">'+(pr.done?'✅ '+pr.date:'📅 আজ পড়েছি')+'</button></div>'+
-      '<div class="seg"><button type="button" id="segL" class="active">📖 শেখা</button><button type="button" id="segT">📝 টেস্ট ('+(u.test?u.test.length:0)+')</button></div>'+
-      '<div class="unitgrid"><div class="learncol" id="learncol">'+learn+'</div><div class="testcol" id="testcol">'+testh+'</div></div>';
+      '<div class="seg"><button type="button" id="segL" class="active">📖 শেখা</button><button type="button" id="segT">📝 টেস্ট</button></div>'+
+      '<div class="unitgrid"><div class="learncol" id="learncol">'+learn+'</div><div class="testcol" id="testcol"></div></div>';
 
     var LC=document.getElementById("learncol"), TC=document.getElementById("testcol");
     var segLb=document.getElementById("segL"), segTb=document.getElementById("segT");
@@ -705,33 +719,155 @@
     document.getElementById("backBtn").onclick=function(){history.back();};
     document.getElementById("doneBtn").onclick=function(){markDone(id);};
     segLb.onclick=showLearn;
-    segTb.onclick=showTest;
+    segTb.onclick=function(){ if(!TC.innerHTML) newAttempt(); showTest(); };
 
-    var answered={};
+    /* ---- attempt-based quiz: 10 random questions, pass = at most 1 wrong ---- */
+    var ATT_N=Math.min(10,(u.test||[]).length);
+    function newAttempt(){
+      var pool=(u.test||[]).slice();
+      for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+      var qs=pool.slice(0,ATT_N);
+      var answered={};
+      var body=qs.map(function(qq,qi){
+        var badge=(qq.level==="hard"||qq.hard)?'<span class="hardbadge">HARD</span>':'';
+        var longOpts=qq.options.some(function(o){return o.length>28;});
+        return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+badge+'</div>'+
+          '<div class="opts'+(longOpts?' long':'')+'">'+
+          qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
+          '</div><div class="explain" id="ex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
+      }).join("");
+      TC.innerHTML='<div class="notecard" style="margin:0 0 12px">📝 <b>'+ATT_N+'টি প্রশ্ন</b> , সর্বোচ্চ <b>১টি ভুল</b> হলে পাস. ২টি বা বেশি ভুল হলে আবার (নতুন এলোমেলো প্রশ্নে) দিতে হবে.</div>'+
+        body+'<div class="result hidden" id="result"></div>';
+      Array.prototype.forEach.call(TC.querySelectorAll(".q"),function(qEl){
+        var qi=+qEl.getAttribute("data-qi");var correct=qs[qi].answer;
+        Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(btn){
+          btn.onclick=function(){
+            if(answered[qi]!==undefined)return;
+            var oi=+btn.getAttribute("data-oi");answered[qi]=(oi===correct);
+            Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(b){b.classList.add("disabled");
+              var bi=+b.getAttribute("data-oi");if(bi===correct)b.classList.add("right");else if(bi===oi)b.classList.add("wrong");});
+            var _bl=qEl.querySelector(".blank");if(_bl){_bl.textContent=qs[qi].options[correct];_bl.classList.add("filled");}
+            document.getElementById("ex_"+qi).classList.add("show");
+            finishIfDone();
+          };
+        });
+      });
+      function finishIfDone(){
+        var keys=Object.keys(answered); if(keys.length<qs.length)return;
+        var cc=keys.filter(function(k){return answered[k];}).length;
+        var wrong=qs.length-cc;
+        // write-7-times cards for every wrong answer
+        var wrongCards=qs.map(function(qq,qi){
+          if(answered[qi])return "";
+          var correctText=qq.options[qq.answer];
+          var sentence=/_{2,}/.test(qq.q)?qq.q.replace(/_{2,}/,correctText):(correctText+"  ("+qq.q.replace(/\*\*/g,"")+")");
+          return '<div class="wrote"><div class="wrn">❌ ভুল হয়েছে — এই সঠিক বাক্যটা খাতায় অন্তত <b>৭ বার</b> লিখুন:</div>'+
+            '<div class="wrs">'+esc(sentence)+' '+ttsBtn(sentence)+'</div></div>';
+        }).join("");
+        var r=document.getElementById("result");r.classList.remove("hidden");
+        autoMark("mcq"); render_header();
+        if(wrong<=1){
+          var p=progress[id]||{}; p.score={correct:cc,total:qs.length}; p.passed=true; p.done=true; if(!p.date)p.date=today();
+          progress[id]=p; saveP(progress);
+          var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
+          var nu=nextUnitAfter(id);
+          r.innerHTML='<div style="color:var(--right);font-size:1.1rem">✅ পাস! '+cc+' / '+qs.length+' সঠিক.</div>'+wrongCards+
+            (nu?'<div style="margin-top:10px;color:var(--muted);font-size:.85rem">পরের ইউনিট আনলক হলো.</div>':'')+
+            '<div style="margin-top:12px">'+(nu?'<button class="btn" id="nextU">পরের ইউনিট ▶</button> ':'')+
+            '<button class="btn ghost" id="againU">🔁 আবার</button></div>';
+          render_toc&&0;
+          var goNext=function(){ if(nu)openUnit(nu.id); };
+          if(nu){ document.getElementById("nextU").onclick=function(){ withAd(goNext); }; }
+          document.getElementById("againU").onclick=newAttempt;
+          // pass reward: show interstitial now (result already visible)
+          try{ if(ADS)setTimeout(function(){AndroidBridge.showInterstitial();},400); }catch(e){}
+        } else {
+          r.innerHTML='<div style="color:var(--wrong);font-size:1.1rem">❌ '+wrong+'টি ভুল. পাস হতে সর্বোচ্চ ১টি ভুল লাগবে.</div>'+wrongCards+
+            '<div style="margin-top:12px"><button class="btn" id="retryU">🔁 আবার টেস্ট দিন (নতুন প্রশ্ন)</button> '+
+            '<button class="btn ghost" id="reviewU">📖 আগে নিয়ম পড়ি</button></div>';
+          document.getElementById("retryU").onclick=newAttempt;
+          document.getElementById("reviewU").onclick=showLearn;
+        }
+        document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});
+      }
+    }
+  }
+  function withAd(cb){
+    if(!ADS){ cb(); return; }
+    try{ AndroidBridge.showInterstitial(); }catch(e){}
+    setTimeout(cb, 300);
+  }
+  function nextUnitAfter(id){
+    for(var i=0;i<DATA.length;i++){ if(DATA[i].id===id) return DATA[i+1]||null; }
+    return null;
+  }
+
+  /* ---------- weekly exam (every 7 units) ---------- */
+  function groupUnits(k){ return DATA.slice(k*7, k*7+7); }
+  function weeklyPassed(k){ return !!(progress._weekly && progress._weekly[k]); }
+  function weeklyReady(k){
+    var us=groupUnits(k); if(us.length<7) return false;
+    if(weeklyPassed(k)) return false;
+    return us.every(function(u){var p=progress[u.id];return !!(p&&p.passed);});
+  }
+  function firstReadyWeekly(){ for(var k=0;k*7+6<DATA.length;k++){ if(weeklyReady(k)) return k; } return -1; }
+  function openWeekly(k){
+    var us=groupUnits(k);
+    var pool=[];
+    us.forEach(function(u){
+      var t=(u.test||[]).slice();
+      for(var i=t.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=t[i];t[i]=t[j];t[j]=x;}
+      pool=pool.concat(t.slice(0,2));
+    });
+    for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=pool[i];pool[i]=pool[j];pool[j]=x;}
+    var qs=pool, answered={};
+    var v=engineView();
+    var body=qs.map(function(qq,qi){
+      var longOpts=qq.options.some(function(o){return o.length>28;});
+      return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+'</div>'+
+        '<div class="opts'+(longOpts?' long':'')+'">'+
+        qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
+        '</div><div class="explain" id="wex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
+    }).join("");
+    v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
+      '<h3 style="margin:2px 0">📅 সাপ্তাহিক পরীক্ষা '+(k+1)+'</h3>'+
+      '<div class="drillmeta" style="margin-bottom:10px">'+us.length+'টি ইউনিটের ওপর '+qs.length+'টি প্রশ্ন , সর্বোচ্চ ২টি ভুল হলে পাস. ফেল করলে এই ৭টি ইউনিট আবার পড়তে হবে.</div>'+
+      body+'<div class="result hidden" id="wresult"></div>'+
+      '<div style="margin-top:10px"><button class="btn ghost" id="wExit">← পরে দেব</button></div></div>';
+    document.getElementById("wExit").onclick=function(){history.back();};
     Array.prototype.forEach.call(v.querySelectorAll(".q"),function(qEl){
-      var qi=+qEl.getAttribute("data-qi");var correct=u.test[qi].answer;
+      var qi=+qEl.getAttribute("data-qi");var correct=qs[qi].answer;
       Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(btn){
         btn.onclick=function(){
           if(answered[qi]!==undefined)return;
           var oi=+btn.getAttribute("data-oi");answered[qi]=(oi===correct);
           Array.prototype.forEach.call(qEl.querySelectorAll(".opt"),function(b){b.classList.add("disabled");
             var bi=+b.getAttribute("data-oi");if(bi===correct)b.classList.add("right");else if(bi===oi)b.classList.add("wrong");});
-          var _bl=qEl.querySelector(".blank");if(_bl){_bl.textContent=u.test[qi].options[correct];_bl.classList.add("filled");}
-          document.getElementById("ex_"+qi).classList.add("show");updateResult();
+          var _bl=qEl.querySelector(".blank");if(_bl){_bl.textContent=qs[qi].options[correct];_bl.classList.add("filled");}
+          document.getElementById("wex_"+qi).classList.add("show");
+          grade();
         };
       });
     });
-    function updateResult(){
-      var keys=Object.keys(answered);if(keys.length<u.test.length)return;
-      var cc=keys.filter(function(k){return answered[k];}).length;
-      var r=document.getElementById("result");r.classList.remove("hidden");
-      r.innerHTML='🎯 ফল: '+cc+' / '+u.test.length+' সঠিক. '+
-        (cc===u.test.length?'দারুণ! 💯':(cc>=u.test.length*0.7?'ভালো! revise করুন.':'নিয়মটা আবার পড়ে চেষ্টা করুন.'));
-      var p=progress[id]||{};p.score={correct:cc,total:u.test.length};if(!p.done){p.done=true;p.date=today();}
-      progress[id]=p;saveP(progress);autoMark("mcq");
-      var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
-      render_header();
-      maybeInterstitial();
+    function grade(){
+      var keys=Object.keys(answered); if(keys.length<qs.length)return;
+      var cc=keys.filter(function(x){return answered[x];}).length, wrong=qs.length-cc;
+      var r=document.getElementById("wresult"); r.classList.remove("hidden");
+      if(wrong<=2){
+        if(!progress._weekly)progress._weekly={}; progress._weekly[k]=true; saveP(progress); render_header();
+        r.innerHTML='<div style="color:var(--right);font-size:1.15rem">🎉 সাপ্তাহিক পরীক্ষা পাস! '+cc+' / '+qs.length+'</div>'+
+          '<div style="margin-top:10px"><button class="btn" id="wDone">✅ চালিয়ে যান</button></div>';
+        document.getElementById("wDone").onclick=function(){ withAd(function(){history.back();}); };
+      } else {
+        us.forEach(function(u){var p=progress[u.id]||{};p.review=true;progress[u.id]=p;}); saveP(progress);
+        r.innerHTML='<div style="color:var(--wrong);font-size:1.15rem">❌ '+wrong+'টি ভুল. পাস হয়নি.</div>'+
+          '<div style="margin-top:6px;font-size:.9rem">এই ৭টি ইউনিট আবার ভালো করে পড়ুন, তারপর আবার পরীক্ষা দিন.</div>'+
+          '<div style="margin-top:12px"><button class="btn" id="wReview">📖 প্রথম ইউনিট থেকে পড়ি</button> '+
+          '<button class="btn ghost" id="wRetry">🔁 আবার পরীক্ষা</button></div>';
+        document.getElementById("wReview").onclick=function(){ openUnit(us[0].id); };
+        document.getElementById("wRetry").onclick=function(){ openWeekly(k); };
+      }
+      document.getElementById("wresult").scrollIntoView({behavior:"smooth",block:"center"});
     }
   }
   function markDone(id){
