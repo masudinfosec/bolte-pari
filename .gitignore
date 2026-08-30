@@ -19,3 +19,6 @@ node_modules/
 
 # stray root screenshots
 /*.png
+
+# private launch/marketing material (do not publish)
+LAUNCH_POSTS.md
