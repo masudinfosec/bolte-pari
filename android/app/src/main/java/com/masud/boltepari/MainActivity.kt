@@ -13,7 +13,9 @@ import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.google.android.gms.ads.AdListener
@@ -86,6 +88,16 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
                 } catch (e: Exception) {
                     fileCallback = null; false
                 }
+            }
+        }
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url?.toString() ?: return false
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    try { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) } catch (e: Exception) {}
+                    return true
+                }
+                return false
             }
         }
         webView.loadUrl("file:///android_asset/index.html")
