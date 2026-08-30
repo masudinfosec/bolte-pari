@@ -69,6 +69,9 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.mediaPlaybackRequiresUserGesture = false
+        // honor the page's <meta viewport width=device-width> so CSS breakpoints match the phone width
+        webView.settings.useWideViewPort = true
+        webView.settings.loadWithOverviewMode = false
         webView.addJavascriptInterface(WebAppBridge(), "AndroidBridge")
         webView.webChromeClient = object : WebChromeClient() {
             override fun onShowFileChooser(

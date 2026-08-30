@@ -140,7 +140,7 @@
   .bub .bn{font-size:.8rem;color:var(--muted);margin-top:2px}
   .scat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
     padding:12px 15px;margin:0 0 10px;cursor:pointer;font-weight:700}
-  .sitem{padding:8px 2
+  .sitem{padding:8px 2px;border-bottom:1px dashed var(--border)}
   .dots{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:8px 0}
   .dot{width:14px;height:14px;border-radius:5px;background:var(--card2);border:1px solid var(--border)}
   .dot.full{background:var(--right);border-color:var(--right)}
@@ -168,20 +168,11 @@
   .topbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 10px}
   .topbar .ttl{font-weight:800;font-size:1rem;flex:1;min-width:180px}
   .seg{display:flex;background:var(--card2);border-radius:14px;padding:4px;margin:0 0 12px;gap:4px}
-  .seg button{flex:1;border:none;border-radius:11px;padding:9px 6px;font-family:inherit;
-    font-weight:800;font-size:.9rem;background:none;color:var(--muted);cursor:pointer}
+  .seg button{flex:1;border:none;border-radius:11px;padding:14px 6px;min-height:48px;font-family:inherit;
+    font-weight:800;font-size:.95rem;background:none;color:var(--muted);cursor:pointer}
   .seg button.active{background:var(--card);color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,.15)}
-  .unitgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
-  .learncol{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow-y:auto;padding-right:4px}
-  .learncol::-webkit-scrollbar{width:8px}
-  .learncol::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-  @media(max-width:950px){
-    .unitgrid{grid-template-columns:1fr}
-    .learncol{position:static;max-height:none;overflow:visible}
-    body.seg-learn .testcol{display:none}
-    body.seg-test .learncol{display:none}
-  }
-  @media(min-width:951px){.seg{display:none}}
+  .unitgrid{display:block}
+  .learncol,.testcol{width:100%}
   .lbox{border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;
     margin:0 0 12px;background:var(--card)}
   .lbox h4{margin:0 0 8px;font-size:.95rem;color:var(--brand)}
@@ -554,17 +545,18 @@
       '<button class="btn ghost small" id="backBtn">←</button>'+
       '<span class="lvl">'+u.level+'</span><span class="ttl">'+esc(u.title)+'</span>'+
       '<button class="btn small" id="doneBtn">'+(pr.done?'✅ '+pr.date:'📅 আজ পড়েছি')+'</button></div>'+
-      '<div class="seg"><button id="segL" class="active">📖 শেখা</button><button id="segT">📝 টেস্ট ('+(u.test?u.test.length:0)+')</button></div>'+
-      '<div class="unitgrid"><div class="learncol">'+learn+'</div><div class="testcol">'+testh+'</div></div>';
+      '<div class="seg"><button type="button" id="segL" class="active">📖 শেখা</button><button type="button" id="segT">📝 টেস্ট ('+(u.test?u.test.length:0)+')</button></div>'+
+      '<div class="unitgrid"><div class="learncol" id="learncol">'+learn+'</div><div class="testcol" id="testcol">'+testh+'</div></div>';
 
+    var LC=document.getElementById("learncol"), TC=document.getElementById("testcol");
+    var segLb=document.getElementById("segL"), segTb=document.getElementById("segT");
+    function showLearn(){ LC.style.display="block"; TC.style.display="none"; segLb.classList.add("active"); segTb.classList.remove("active"); window.scrollTo(0,0); }
+    function showTest(){ LC.style.display="none"; TC.style.display="block"; segTb.classList.add("active"); segLb.classList.remove("active"); window.scrollTo(0,0); }
+    showLearn();
     document.getElementById("backBtn").onclick=function(){history.back();};
     document.getElementById("doneBtn").onclick=function(){markDone(id);};
-    document.getElementById("segL").onclick=function(){
-      document.body.classList.add("seg-learn");document.body.classList.remove("seg-test");
-      this.classList.add("active");document.getElementById("segT").classList.remove("active");window.scrollTo(0,0);};
-    document.getElementById("segT").onclick=function(){
-      document.body.classList.add("seg-test");document.body.classList.remove("seg-learn");
-      this.classList.add("active");document.getElementById("segL").classList.remove("active");window.scrollTo(0,0);};
+    segLb.onclick=showLearn;
+    segTb.onclick=showTest;
 
     var answered={};
     Array.prototype.forEach.call(v.querySelectorAll(".q"),function(qEl){
