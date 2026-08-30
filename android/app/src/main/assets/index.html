@@ -131,6 +131,14 @@
   .chapbody{display:none;padding:0 10px 10px}
   .chap.open .chapbody{display:block}
   .lvlband{font-size:.72rem;font-weight:800;color:var(--muted);margin:16px 0 8px;letter-spacing:.04em}
+  .rule{border-left:3px solid var(--brand);background:var(--card2);border-radius:0 12px 12px 0;
+    padding:9px 12px;margin:0 0 9px}
+  .rule .rn{font-weight:700;font-size:.93rem}
+  .rule .rex{font-size:.95rem;margin-top:4px}
+  .rule .rex b{color:var(--right)}
+  .rule .rbn{font-size:.8rem;color:var(--muted);margin-top:1px}
+  .rulen{display:inline-block;min-width:20px;height:20px;line-height:20px;text-align:center;
+    background:var(--brand);color:#fff;border-radius:50%;font-size:.72rem;font-weight:800;margin-right:7px}
 
   /* ===== practice tab ===== */
   .sectitle{font-size:1rem;font-weight:800;margin:16px 0 10px}
@@ -623,6 +631,14 @@
       learn+='<div class="lbox"><h4>🧩 গঠন — কোনটা কোথায় বসে</h4>'+
         '<div class="slots">'+esc(P.slots)+'</div>'+
         '<table class="ptab">'+prow("✅ হ্যাঁ-বোধক",P.pos)+prow("❌ না-বোধক",P.neg)+prow("❓ প্রশ্ন",P.q)+'</table></div>';
+    }
+    if(u.rules&&u.rules.length){
+      learn+='<div class="lbox"><h4>📋 নিয়ম ও গঠন (টেস্টে যা আসবে)</h4>'+
+        u.rules.map(function(r,ri){
+          return '<div class="rule"><div class="rn"><span class="rulen">'+(ri+1)+'</span>'+hl(r.n)+'</div>'+
+            '<div class="rex">'+hl(r.ex)+' '+ttsBtn(r.ex)+'</div>'+
+            (r.bn?'<div class="rbn">'+esc(r.bn)+'</div>':'')+'</div>';
+        }).join("")+'</div>';
     }
     if(u.explain) learn+='<div class="lbox"><h4>🧠 এক নজরে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
       ((u.form&&!u.patterns)?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
