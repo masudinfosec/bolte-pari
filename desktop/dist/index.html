@@ -281,6 +281,7 @@
     <div class="logo">ব</div>
     <div><div class="brandname">Bolte Pari</div><div class="brandsub">English, A1 → C2</div></div>
     <div class="hchips">
+      <button class="hchip" id="langBtn" style="cursor:pointer">🌐 <span id="langLbl">EN</span></button>
       <div class="hchip"><span class="fl">🔥</span><span id="hstreak">0</span></div>
       <div class="hchip" id="hdone">0/0</div>
     </div>
@@ -300,18 +301,18 @@
 
   <!-- PRACTICE -->
   <div id="viewPractice" class="hidden">
-    <div class="sectitle">আজকের practice — শেষ করে টিক দিন</div>
+    <div class="sectitle" id="pTitle">আজকের practice — শেষ করে টিক দিন</div>
     <div class="pcards" id="pcards"></div>
     <button class="hero" id="drillBtn">
       <h3>🎙️ Interview Drill</h3>
-      <p>Off-script প্রশ্ন, ৫ সেকেন্ড ভাবুন, জোরে উত্তর দিন, নমুনা উত্তর সাথে</p>
+      <p id="drillP">Off-script প্রশ্ন, ৫ সেকেন্ড ভাবুন, জোরে উত্তর দিন, নমুনা উত্তর সাথে</p>
     </button>
-    <div class="sectitle">দৈনন্দিন ইংরেজি (শুনে শিখুন)</div>
+    <div class="sectitle" id="dailyTitle">দৈনন্দিন ইংরেজি (শুনে শিখুন)</div>
     <div class="pcards">
-      <div class="pcard" id="convoBtn"><div class="pic">💬</div><div class="pt">Conversations</div><div class="ps">১২টি বাস্তব সংলাপ</div></div>
-      <div class="pcard" id="sentBtn"><div class="pic">🗂️</div><div class="pt">Sentence Bank</div><div class="ps">১৫০টি দরকারি বাক্য</div></div>
+      <div class="pcard" id="convoBtn"><div class="pic">💬</div><div class="pt">Conversations</div><div class="ps" id="convoS">১২টি বাস্তব সংলাপ</div></div>
+      <div class="pcard" id="sentBtn"><div class="pic">🗂️</div><div class="pt">Sentence Bank</div><div class="ps" id="sentS">১৫০টি দরকারি বাক্য</div></div>
     </div>
-    <div class="notecard">📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন
+    <div class="notecard" id="benchN">📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন
       (পরিচয়, গতকাল, কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন.</div>
   </div>
 
@@ -319,18 +320,18 @@
   <div id="viewProgress" class="hidden">
     <div class="streakhero">
       <div class="flamebig">🔥</div>
-      <div><b id="pstreak">0</b> দিনের streak<div class="balline">দিনে ≥৩ টিক হলে streak বাড়ে</div></div>
+      <div><b id="pstreak">0</b> <span id="streakW">দিনের streak</span><div class="balline" id="streakN">দিনে ≥৩ টিক হলে streak বাড়ে</div></div>
     </div>
     <div class="statgrid" id="statgrid"></div>
-    <div class="sectitle">শেষ ১৪ দিন</div>
+    <div class="sectitle" id="last14">শেষ ১৪ দিন</div>
     <div class="dots" id="pdots"></div>
     <div class="balline" id="pbal"></div>
     <div class="sectitle">Data</div>
     <div class="databtns">
-      <button class="btn small" id="exportBtn">⬇️ Progress backup</button>
+      <button class="btn small" id="exportBtn">⬇️ <span id="bkupLbl">Progress backup</span></button>
       <button class="btn ghost small" id="importBtn">⬆️ Restore</button>
       <input type="file" id="importFile" class="hidden" accept="application/json">
-      <button class="btn ghost small" id="resetBtn">🗑️ মুছুন</button>
+      <button class="btn ghost small" id="resetBtn">🗑️ <span id="delLbl">মুছুন</span></button>
     </div>
     <div class="sectitle">About</div>
     <div class="aboutcard">
@@ -343,7 +344,7 @@
         <a class="ablink" href="https://www.linkedin.com/in/masudinfosec/" target="_blank" rel="noopener">💼 LinkedIn</a>
         <a class="ablink" href="https://github.com/masudinfosec" target="_blank" rel="noopener">🐙 GitHub</a>
       </div>
-      <div class="abnote">নিজে শিখুন, নিজে এগিয়ে যান. একটি স্বাধীন শেখার অ্যাপ.</div>
+      <div class="abnote" id="abnote">নিজে শিখুন, নিজে এগিয়ে যান. একটি স্বাধীন শেখার অ্যাপ.</div>
     </div>
   </div>
 
@@ -353,7 +354,7 @@
   <div id="drillView" class="hidden"></div>
 </div>
 
-<footer>Bolte Pari, progress এই 'device' এ save থাকে — মাঝে মাঝে backup নিন</footer>
+<footer id="footerN">Bolte Pari, progress এই 'device' এ save থাকে — মাঝে মাঝে backup নিন</footer>
 
 <nav class="bottom">
   <button class="nbtn active" data-v="Learn"><span class="ic">📚</span>শিখুন</button>
@@ -378,6 +379,35 @@
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
   function hl(s){return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");}
   function gapify(html){return html.replace(/_{2,}/g,'<span class="blank">&nbsp;</span>');}
+  /* ---------- bilingual (help language: bn or en) ---------- */
+  var LANG=(function(){try{return localStorage.getItem('bp_lang')==='en'?'en':'bn';}catch(e){return 'bn';}})();
+  function T(bn,en){return LANG==='en'?en:bn;}
+  function LG(o,f){ if(!o)return ""; if(LANG==='en'){var e=o[f+'_en']; if(e!=null&&e!=="")return e;} return o[f]!=null?o[f]:""; }
+  function ENonly(){return LANG==='en';}
+  function setLang(l){ try{localStorage.setItem('bp_lang',l);}catch(e){} try{location.reload();}catch(e){} }
+  function applyStaticUI(){
+    var L=document.getElementById('langLbl'); if(L)L.textContent=(LANG==='en')?'বাং':'EN';
+    var nav={Learn:T('শিখুন','Learn'),Practice:T('প্র্যাকটিস','Practice'),Progress:T('অগ্রগতি','Progress')};
+    Array.prototype.forEach.call(document.querySelectorAll('.nbtn'),function(b){
+      var v=b.getAttribute('data-v'); var ic=b.querySelector('.ic');
+      b.innerHTML=(ic?ic.outerHTML:'')+nav[v];
+    });
+    function sT(id,bn,en){var e=document.getElementById(id);if(e)e.textContent=T(bn,en);}
+    function sH(id,bn,en){var e=document.getElementById(id);if(e)e.innerHTML=T(bn,en);}
+    var s=document.getElementById('search'); if(s)s.placeholder=T('🔎 unit খুঁজুন (নাম বা নম্বর)...','🔎 Search a unit (name or number)...');
+    sT('pTitle','আজকের practice — শেষ করে টিক দিন','Today\'s practice — tick when done');
+    sT('drillP','Off-script প্রশ্ন, ৫ সেকেন্ড ভাবুন, জোরে উত্তর দিন, নমুনা উত্তর সাথে','Off-script questions, think 5 seconds, answer aloud, sample answer given');
+    sT('dailyTitle','দৈনন্দিন ইংরেজি (শুনে শিখুন)','Everyday English (learn by listening)');
+    sT('convoS','১২টি বাস্তব সংলাপ','12 real dialogues');
+    sT('sentS','১৫০টি দরকারি বাক্য','150 useful sentences');
+    sH('benchN','📼 <b>মাসিক benchmark:</b> প্রতি মাসের ১ তারিখে একই ৩ টপিকে ২ মিনিট করে রেকর্ড করুন (পরিচয়, গতকাল, কেন এই দেশ), আগের মাসেরটার সাথে মিলিয়ে শুনুন.','📼 <b>Monthly benchmark:</b> On the 1st of each month, record 2 minutes on the same 3 topics (introduce yourself, yesterday, why this country) and compare with last month.');
+    sT('streakW','দিনের streak','day streak');
+    sT('streakN','দিনে ≥৩ টিক হলে streak বাড়ে','3+ ticks a day keeps the streak');
+    sT('last14','শেষ ১৪ দিন','Last 14 days');
+    sT('delLbl','মুছুন','Delete');
+    sT('abnote','নিজে শিখুন, নিজে এগিয়ে যান. একটি স্বাধীন শেখার অ্যাপ.','Learn on your own, move forward on your own. An independent learning app.');
+    sT('footerN','Bolte Pari, progress এই device এ save থাকে — মাঝে মাঝে backup নিন','Bolte Pari — progress is saved on this device. Back it up now and then.');
+  }
 
   /* ---------- text-to-speech (free, browser/native engine) ---------- */
   var _voices=[];
@@ -441,8 +471,8 @@
   };
 
   /* ---------- daily tracker ---------- */
-  var PKEYS=[["pr","🔊","উচ্চারণ","শুনে বলুন — drill"],["sp","🎤","Speaking","Interview drill"],
-             ["li","🎧","Listening","শুনে বুঝুন — drill"],["mcq","📝","Test","মিশ্র ১০ প্রশ্ন"]];
+  var PKEYS=[["pr","🔊",T("উচ্চারণ","Pronounce"),T("শুনে বলুন — drill","Listen and say")],["sp","🎤","Speaking",T("Interview drill","Interview drill")],
+             ["li","🎧","Listening",T("শুনে বুঝুন — drill","Listen and understand")],["mcq","📝","Test",T("মিশ্র ১০ প্রশ্ন","Mixed 10 questions")]];
   function daily(){ if(!progress._daily) progress._daily={}; return progress._daily; }
   function dayRec(ds){ var d=daily(); if(!d[ds]) d[ds]={}; return d[ds]; }
   function dayCount(ds){ var r=(daily()[ds])||{}; var n=0; PKEYS.forEach(function(k){ if(r[k[0]]) n++; }); return n; }
@@ -489,7 +519,7 @@
     var counts={ALL:DATA.length};
     LEVELS.forEach(function(L){counts[L]=DATA.filter(function(u){return u.level===L;}).length;});
     var el=document.getElementById("levelbar");
-    var html='<div class="lchip'+(activeLevel==="ALL"?' active':'')+'" data-l="ALL">সব <small>'+counts.ALL+'</small></div>';
+    var html='<div class="lchip'+(activeLevel==="ALL"?' active':'')+'" data-l="ALL">'+T('সব','All')+' <small>'+counts.ALL+'</small></div>';
     LEVELS.forEach(function(L){ if(counts[L]) html+='<div class="lchip'+(activeLevel===L?' active':'')+'" data-l="'+L+'">'+L+' <small>'+counts[L]+'</small></div>'; });
     el.innerHTML=html;
     Array.prototype.forEach.call(el.querySelectorAll(".lchip"),function(c){
@@ -510,13 +540,13 @@
     var done=0; DATA.forEach(function(x){var p=progress[x.id];if(p&&p.done)done++;});
     var wk=firstReadyWeekly();
     var wkHtml=(wk>=0)?'<button class="contcard wkcard" id="wkBtn"><span class="ci">📅</span>'+
-      '<span class="cm"><span class="cl">সাপ্তাহিক পরীক্ষা '+(wk+1)+'</span>'+
-      '<div class="ct">৭টি ইউনিট শেষ! এবার পরীক্ষা দিন</div>'+
-      '<div class="cg">পাস করলে পরের সপ্তাহ খুলবে</div></span></button>':'';
+      '<span class="cm"><span class="cl">'+T('সাপ্তাহিক পরীক্ষা','Weekly Exam')+' '+(wk+1)+'</span>'+
+      '<div class="ct">'+T('৭টি ইউনিট শেষ! এবার পরীক্ষা দিন','7 units done! Take the exam')+'</div>'+
+      '<div class="cg">'+T('পাস করলে পরের সপ্তাহ খুলবে','Pass to unlock next week')+'</div></span></button>':'';
     el.innerHTML=wkHtml+'<button class="contcard" id="contBtn"><span class="ci">'+(done===0?"🚀":"▶️")+'</span>'+
-      '<span class="cm"><span class="cl">'+(done===0?"শুরু করুন":"চালিয়ে যান")+'</span>'+
+      '<span class="cm"><span class="cl">'+(done===0?T("শুরু করুন","Start"):T("চালিয়ে যান","Continue"))+'</span>'+
       '<div class="ct">'+esc(u.title)+'</div>'+
-      '<div class="cg">'+u.level+' , '+u.id+' , '+done+'/'+DATA.length+' unit শেষ</div></span></button>';
+      '<div class="cg">'+u.level+' , '+u.id+' , '+done+'/'+DATA.length+' '+T('unit শেষ','units done')+'</div></span></button>';
     document.getElementById("contBtn").onclick=function(){ openUnit(u.id); };
     if(wk>=0){ document.getElementById("wkBtn").onclick=function(){ openWeekly(wk); }; }
   }
@@ -525,7 +555,7 @@
       c.onclick=function(){
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
-          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?")){
+          if(confirm(T("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?","This unit is locked. Pass the previous unit's test to unlock it.\n\nUnlock now by watching 2 videos?"))){
             startUnlock(id);
           }
           return;
@@ -539,7 +569,7 @@
     var lvlSeen={}, html="";
     CHAPTERS.forEach(function(c,ci){
       if(activeLevel!=="ALL"&&c.level!==activeLevel)return;
-      if(!lvlSeen[c.level]){lvlSeen[c.level]=1; html+='<div class="lvlband">'+c.level+' স্তর</div>';}
+      if(!lvlSeen[c.level]){lvlSeen[c.level]=1; html+='<div class="lvlband">'+c.level+T(' স্তর',' Level')+'</div>';}
       var tot=c.units.length, done=0;
       c.units.forEach(function(id){var p=progress[id];if(p&&p.done)done++;});
       var pct=tot?Math.round(done/tot*100):0;
@@ -552,19 +582,19 @@
         return '<div class="urow'+(locked?' locked':'')+'" data-id="'+id+'" data-locked="'+(locked?1:0)+'">'+
           '<div class="'+(pr.done?"ring done":"ring")+'" style="--p:'+upct+'"><b>'+inner+'</b></div>'+
           '<div class="umain"><div class="utitle">'+esc(u.title)+'</div>'+
-          '<div class="usub"><span>'+id+'</span><span>'+(u.test?u.test.length:0)+' প্রশ্ন</span>'+
+          '<div class="usub"><span>'+id+'</span><span>'+(u.test?u.test.length:0)+' '+T('প্রশ্ন','Q')+'</span>'+
           (u.diagram?'<span>🖼️</span>':'')+(pr.done&&pr.date?'<span>📅 '+pr.date+'</span>':'')+'</div></div>'+
           '<div class="chev">›</div></div>';
       }).join("");
       html+='<div class="chap'+(openChap[ci]?" open":"")+'" data-ci="'+ci+'">'+
         '<button class="chaphead" data-ci="'+ci+'"><span class="chapic">'+esc(c.icon||"📘")+'</span>'+
-        '<span class="chapmain"><div class="chaptitle">'+esc(c.title)+'</div>'+
-        '<div class="chapsub">'+esc(c.sub||"")+'</div>'+
+        '<span class="chapmain"><div class="chaptitle">'+esc(LG(c,'title'))+'</div>'+
+        '<div class="chapsub">'+esc(LG(c,'sub'))+'</div>'+
         '<div class="chapbar"><i style="width:'+pct+'%"></i></div></span>'+
         '<span class="chapcount">'+done+'/'+tot+'</span><span class="chaparrow">›</span></button>'+
         '<div class="chapbody"><div class="ulist">'+rows+'</div></div></div>';
     });
-    el.innerHTML=html||'<p style="color:var(--muted)">কিছু পাওয়া যায়নি.</p>';
+    el.innerHTML=html||'<p style="color:var(--muted)">'+T('কিছু পাওয়া যায়নি.','No results.')+'</p>';
     Array.prototype.forEach.call(el.querySelectorAll(".chaphead"),function(h){
       h.onclick=function(){ var ci=+h.getAttribute("data-ci"); openChap[ci]=!openChap[ci];
         h.parentNode.classList.toggle("open",!!openChap[ci]); };
@@ -589,7 +619,7 @@
       return (u.title+" "+u.id+" "+(u.ref||"")).toLowerCase().indexOf(q)>=0;
     });
     var el=flat;
-    if(!list.length){el.innerHTML='<p style="color:var(--muted)">কিছু পাওয়া যায়নি.</p>';return;}
+    if(!list.length){el.innerHTML='<p style="color:var(--muted)">'+T('কিছু পাওয়া যায়নি.','No results.')+'</p>';return;}
     el.innerHTML=list.map(function(u){
       var pr=progress[u.id]||{};
       var pct=pr.score?Math.round(pr.score.correct/pr.score.total*100):(pr.done?100:0);
@@ -599,11 +629,11 @@
       if(pr.done){
         var old=pr.date&&((new Date(today())-new Date(pr.date))/86400000>30);
         var low=pr.score&&(pr.score.correct/pr.score.total<0.7);
-        if(old||low)rev='<span class="rev">🔁 আবার</span>';
+        if(old||low)rev='<span class="rev">🔁 '+T('আবার','Again')+'</span>';
       }
       var locked=!isUnlocked(DATA.indexOf(u));
       var lockb=locked?'<span class="lock">🔒 locked</span>':'';
-      var meta='<span class="lvl">'+u.level+'</span><span>'+u.id+'</span><span>'+(u.test?u.test.length:0)+' প্রশ্ন</span>'+
+      var meta='<span class="lvl">'+u.level+'</span><span>'+u.id+'</span><span>'+(u.test?u.test.length:0)+' '+T('প্রশ্ন','Q')+'</span>'+
         (u.diagram?'<span>🖼️</span>':'')+rev+lockb+(pr.done&&pr.date?'<span>📅 '+pr.date+'</span>':'');
       return '<div class="urow'+(locked?' locked':'')+'" data-id="'+u.id+'" data-locked="'+(locked?1:0)+'">'+
         '<div class="'+ringCls+'" style="--p:'+pct+'"><b>'+(locked?"🔒":ringIn)+'</b></div>'+
@@ -614,7 +644,7 @@
       c.onclick=function(){
         var id=c.getAttribute("data-id");
         if(c.getAttribute("data-locked")==="1"){
-          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?")){
+          if(confirm(T("এই unit এখনো locked. আগের unit এর টেস্টে পাস করলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে ২টি ভিডিও দেখুন?","This unit is locked. Pass the previous unit's test to unlock it.\n\nUnlock now by watching 2 videos?"))){
             startUnlock(id);
           }
           return;
@@ -648,8 +678,8 @@
       if(pr&&pr.done){done++;if(pr.date)days[pr.date]=1;} if(pr&&pr.score)tested++;});
     document.getElementById("pstreak").textContent=streak();
     document.getElementById("statgrid").innerHTML=
-      st(done+" / "+total,"unit পড়া")+st((total?Math.round(done/total*100):0)+"%","সম্পূর্ণ")+
-      st(tested,"test দেওয়া")+st(Object.keys(days).length,"দিন পড়েছেন");
+      st(done+" / "+total,T("unit পড়া","units read"))+st((total?Math.round(done/total*100):0)+"%",T("সম্পূর্ণ","complete"))+
+      st(tested,T("test দেওয়া","tests taken"))+st(Object.keys(days).length,T("দিন পড়েছেন","days studied"));
     var dots="",d=new Date(); d.setDate(d.getDate()-13);
     for(var i=0;i<14;i++){var c=dayCount(dstr(d));
       dots+='<span class="dot'+(c>=3?' full':(c>=1?' half':''))+'" title="'+dstr(d)+': '+c+'/4"></span>';
@@ -657,8 +687,8 @@
     document.getElementById("pdots").innerHTML=dots;
     var w=new Date(),tD=0,sD=0;
     for(var j=0;j<7;j++){var r=(daily()[dstr(w)])||{};if(r.mcq)tD++;if(r.sp)sD++;w.setDate(w.getDate()-1);}
-    document.getElementById("pbal").innerHTML="এই ৭ দিনে: test "+tD+" দিন, speaking "+sD+" দিন"+
-      ((tD-sD>=3)?' <b style="color:var(--hard)">⚠️ মুখে বলাটাই আসল!</b>':'');
+    document.getElementById("pbal").innerHTML=T("এই ৭ দিনে: test "+tD+" দিন, speaking "+sD+" দিন","This week: test "+tD+" days, speaking "+sD+" days")+
+      ((tD-sD>=3)?' <b style="color:var(--hard)">⚠️ '+T('মুখে বলাটাই আসল!','Speaking is what matters!')+'</b>':'');
   }
   function st(b,s){return '<div class="stat"><b>'+b+'</b><span>'+s+'</span></div>';}
 
@@ -675,40 +705,42 @@
     var learn="";
     if(u.patterns){
       var P=u.patterns;
-      function prow(lbl,p){return '<tr><td class="pl">'+lbl+'</td><td><div class="en">'+esc(p.en)+' '+ttsBtn(p.en)+'</div><div class="bn">'+esc(p.bn)+'</div></td></tr>';}
-      learn+='<div class="lbox"><h4>🧩 গঠন — কোনটা কোথায় বসে</h4>'+
-        '<div class="slots">'+esc(P.slots)+'</div>'+
-        '<table class="ptab">'+prow("✅ হ্যাঁ-বোধক",P.pos)+prow("❌ না-বোধক",P.neg)+prow("❓ প্রশ্ন",P.q)+'</table></div>';
+      function prow(lbl,p){return '<tr><td class="pl">'+lbl+'</td><td><div class="en">'+esc(p.en)+' '+ttsBtn(p.en)+'</div>'+
+        (ENonly()?'':'<div class="bn">'+esc(p.bn)+'</div>')+'</td></tr>';}
+      learn+='<div class="lbox"><h4>🧩 '+T('গঠন — কোনটা কোথায় বসে','Structure — what goes where')+'</h4>'+
+        '<div class="slots">'+esc(LG(P,'slots'))+'</div>'+
+        '<table class="ptab">'+prow(T('✅ হ্যাঁ-বোধক','✅ Positive'),P.pos)+prow(T('❌ না-বোধক','❌ Negative'),P.neg)+prow(T('❓ প্রশ্ন','❓ Question'),P.q)+'</table></div>';
     }
     if(u.rules&&u.rules.length){
-      learn+='<div class="lbox"><h4>📋 নিয়ম ও গঠন (টেস্টে যা আসবে)</h4>'+
+      learn+='<div class="lbox"><h4>📋 '+T('নিয়ম ও গঠন (টেস্টে যা আসবে)','Rules to know (what the test asks)')+'</h4>'+
         u.rules.map(function(r,ri){
-          return '<div class="rule"><div class="rn"><span class="rulen">'+(ri+1)+'</span>'+hl(r.n)+'</div>'+
+          return '<div class="rule"><div class="rn"><span class="rulen">'+(ri+1)+'</span>'+hl(LG(r,'n'))+'</div>'+
             '<div class="rex">'+hl(r.ex)+' '+ttsBtn(r.ex)+'</div>'+
-            (r.bn?'<div class="rbn">'+esc(r.bn)+'</div>':'')+'</div>';
+            ((!ENonly()&&r.bn)?'<div class="rbn">'+esc(r.bn)+'</div>':'')+'</div>';
         }).join("")+'</div>';
     }
-    if(u.explain) learn+='<div class="lbox"><h4>🧠 এক নজরে (সহজ বাংলা)</h4><div>'+hl(u.explain)+'</div>'+
-      ((u.form&&!u.patterns)?'<div class="formula">গঠন: '+esc(u.form)+'</div>':'')+'</div>';
+    if(u.explain) learn+='<div class="lbox"><h4>🧠 '+T('এক নজরে (সহজ বাংলা)','In short')+'</h4><div>'+hl(LG(u,'explain'))+'</div>'+
+      ((u.form&&!u.patterns)?'<div class="formula">'+T('গঠন','form')+': '+esc(u.form)+'</div>':'')+'</div>';
     if(u.diagram&&DIAG[u.diagram]) learn+='<div class="diagram">'+DIAG[u.diagram]+'</div>';
-    if(u.notes&&u.notes.length) learn+='<div class="lbox"><h4>📌 মূল নিয়ম</h4><ul style="margin:0;padding-left:1.2rem">'+
-      u.notes.map(function(n){return '<li>'+hl(n)+'</li>';}).join("")+'</ul></div>';
+    if(u.notes&&u.notes.length){ var _notes=(ENonly()&&u.notes_en&&u.notes_en.length===u.notes.length)?u.notes_en:u.notes;
+      learn+='<div class="lbox"><h4>📌 '+T('মূল নিয়ম','Key rules')+'</h4><ul style="margin:0;padding-left:1.2rem">'+
+      _notes.map(function(n){return '<li>'+hl(n)+'</li>';}).join("")+'</ul></div>'; }
     if(u.examples&&u.examples.length){
-      learn+='<div class="lbox"><h4>✨ উদাহরণ</h4><div class="exgrid">'+
+      learn+='<div class="lbox"><h4>✨ '+T('উদাহরণ','Examples')+'</h4><div class="exgrid">'+
         u.examples.map(function(e){var en=typeof e==="string"?e:e.en;var bn=(e&&e.bn)?e.bn:"";
-          return '<div class="ex"><div class="en">'+hl(en)+' '+ttsBtn(en)+'</div>'+(bn?'<div class="bn">'+esc(bn)+'</div>':'')+'</div>';}).join("")+'</div></div>';
+          return '<div class="ex"><div class="en">'+hl(en)+' '+ttsBtn(en)+'</div>'+((!ENonly()&&bn)?'<div class="bn">'+esc(bn)+'</div>':'')+'</div>';}).join("")+'</div></div>';
     }
     if(u.mistakes&&u.mistakes.length){
-      learn+='<div class="lbox"><h4>⚠️ সাধারণ ভুল</h4>'+
+      learn+='<div class="lbox"><h4>⚠️ '+T('সাধারণ ভুল','Common mistakes')+'</h4>'+
         u.mistakes.map(function(m){return '<div class="mis"><span class="w">'+esc(m.wrong)+'</span> → <span class="r">'+esc(m.right)+'</span>'+
-          (m.why?'<span class="y">💡 '+esc(m.why)+'</span>':'')+'</div>';}).join("")+'</div>';
+          (LG(m,'why')?'<span class="y">💡 '+esc(LG(m,'why'))+'</span>':'')+'</div>';}).join("")+'</div>';
     }
 
     v.innerHTML='<div class="topbar">'+
       '<button class="btn ghost small" id="backBtn">←</button>'+
       '<span class="lvl">'+u.level+'</span><span class="ttl">'+esc(u.title)+'</span>'+
-      '<button class="btn small" id="doneBtn">'+(pr.done?'✅ '+pr.date:'📅 আজ পড়েছি')+'</button></div>'+
-      '<div class="seg"><button type="button" id="segL" class="active">📖 শেখা</button><button type="button" id="segT">📝 টেস্ট</button></div>'+
+      '<button class="btn small" id="doneBtn">'+(pr.done?'✅ '+pr.date:'📅 '+T('আজ পড়েছি','Read today'))+'</button></div>'+
+      '<div class="seg"><button type="button" id="segL" class="active">📖 '+T('শেখা','Learn')+'</button><button type="button" id="segT">📝 '+T('টেস্ট','Test')+'</button></div>'+
       '<div class="unitgrid"><div class="learncol" id="learncol">'+learn+'</div><div class="testcol" id="testcol"></div></div>';
 
     var LC=document.getElementById("learncol"), TC=document.getElementById("testcol");
@@ -734,9 +766,9 @@
         return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+badge+'</div>'+
           '<div class="opts'+(longOpts?' long':'')+'">'+
           qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
-          '</div><div class="explain" id="ex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
+          '</div><div class="explain" id="ex_'+qi+'">💡 '+hl(LG(qq,'explain'))+'</div></div>';
       }).join("");
-      TC.innerHTML='<div class="notecard" style="margin:0 0 12px">📝 <b>'+ATT_N+'টি প্রশ্ন</b> , সর্বোচ্চ <b>১টি ভুল</b> হলে পাস. ২টি বা বেশি ভুল হলে আবার (নতুন এলোমেলো প্রশ্নে) দিতে হবে.</div>'+
+      TC.innerHTML='<div class="notecard" style="margin:0 0 12px">📝 '+T('<b>'+ATT_N+'টি প্রশ্ন</b> , সর্বোচ্চ <b>১টি ভুল</b> হলে পাস. ২টি বা বেশি ভুল হলে আবার (নতুন এলোমেলো প্রশ্নে) দিতে হবে.','<b>'+ATT_N+' questions</b> , at most <b>1 wrong</b> to pass. 2 or more wrong means retake (with fresh random questions).')+'</div>'+
         body+'<div class="result hidden" id="result"></div>';
       Array.prototype.forEach.call(TC.querySelectorAll(".q"),function(qEl){
         var qi=+qEl.getAttribute("data-qi");var correct=qs[qi].answer;
@@ -761,7 +793,7 @@
           if(answered[qi])return "";
           var correctText=qq.options[qq.answer];
           var sentence=/_{2,}/.test(qq.q)?qq.q.replace(/_{2,}/,correctText):(correctText+"  ("+qq.q.replace(/\*\*/g,"")+")");
-          return '<div class="wrote"><div class="wrn">❌ ভুল হয়েছে — এই সঠিক বাক্যটা খাতায় অন্তত <b>৭ বার</b> লিখুন:</div>'+
+          return '<div class="wrote"><div class="wrn">❌ '+T('ভুল হয়েছে — এই সঠিক বাক্যটা খাতায় অন্তত <b>৭ বার</b> লিখুন:','Wrong — write this correct sentence in your notebook at least <b>7 times</b>:')+'</div>'+
             '<div class="wrs">'+esc(sentence)+' '+ttsBtn(sentence)+'</div></div>';
         }).join("");
         var r=document.getElementById("result");r.classList.remove("hidden");
@@ -771,20 +803,18 @@
           progress[id]=p; saveP(progress);
           var db=document.getElementById("doneBtn");if(db)db.textContent='✅ '+p.date;
           var nu=nextUnitAfter(id);
-          r.innerHTML='<div style="color:var(--right);font-size:1.1rem">✅ পাস! '+cc+' / '+qs.length+' সঠিক.</div>'+wrongCards+
-            (nu?'<div style="margin-top:10px;color:var(--muted);font-size:.85rem">পরের ইউনিট আনলক হলো.</div>':'')+
-            '<div style="margin-top:12px">'+(nu?'<button class="btn" id="nextU">পরের ইউনিট ▶</button> ':'')+
-            '<button class="btn ghost" id="againU">🔁 আবার</button></div>';
-          render_toc&&0;
+          r.innerHTML='<div style="color:var(--right);font-size:1.1rem">✅ '+T('পাস!','Pass!')+' '+cc+' / '+qs.length+'</div>'+wrongCards+
+            (nu?'<div style="margin-top:10px;color:var(--muted);font-size:.85rem">'+T('পরের ইউনিট আনলক হলো.','Next unit unlocked.')+'</div>':'')+
+            '<div style="margin-top:12px">'+(nu?'<button class="btn" id="nextU">'+T('পরের ইউনিট','Next unit')+' ▶</button> ':'')+
+            '<button class="btn ghost" id="againU">🔁 '+T('আবার','Again')+'</button></div>';
           var goNext=function(){ if(nu)openUnit(nu.id); };
           if(nu){ document.getElementById("nextU").onclick=function(){ withAd(goNext); }; }
           document.getElementById("againU").onclick=newAttempt;
-          // pass reward: show interstitial now (result already visible)
           try{ if(ADS)setTimeout(function(){AndroidBridge.showInterstitial();},400); }catch(e){}
         } else {
-          r.innerHTML='<div style="color:var(--wrong);font-size:1.1rem">❌ '+wrong+'টি ভুল. পাস হতে সর্বোচ্চ ১টি ভুল লাগবে.</div>'+wrongCards+
-            '<div style="margin-top:12px"><button class="btn" id="retryU">🔁 আবার টেস্ট দিন (নতুন প্রশ্ন)</button> '+
-            '<button class="btn ghost" id="reviewU">📖 আগে নিয়ম পড়ি</button></div>';
+          r.innerHTML='<div style="color:var(--wrong);font-size:1.1rem">❌ '+T(wrong+'টি ভুল. পাস হতে সর্বোচ্চ ১টি ভুল লাগবে.',wrong+' wrong. You need at most 1 wrong to pass.')+'</div>'+wrongCards+
+            '<div style="margin-top:12px"><button class="btn" id="retryU">🔁 '+T('আবার টেস্ট দিন (নতুন প্রশ্ন)','Retake (new questions)')+'</button> '+
+            '<button class="btn ghost" id="reviewU">📖 '+T('আগে নিয়ম পড়ি','Review the rules')+'</button></div>';
           document.getElementById("retryU").onclick=newAttempt;
           document.getElementById("reviewU").onclick=showLearn;
         }
@@ -827,13 +857,13 @@
       return '<div class="q" data-qi="'+qi+'"><div class="qt">'+(qi+1)+'. '+gapify(hl(qq.q))+'</div>'+
         '<div class="opts'+(longOpts?' long':'')+'">'+
         qq.options.map(function(op,oi){return '<button class="opt" data-oi="'+oi+'">'+hl(op)+'</button>';}).join("")+
-        '</div><div class="explain" id="wex_'+qi+'">💡 '+hl(qq.explain||"")+'</div></div>';
+        '</div><div class="explain" id="wex_'+qi+'">💡 '+hl(LG(qq,'explain'))+'</div></div>';
     }).join("");
     v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
-      '<h3 style="margin:2px 0">📅 সাপ্তাহিক পরীক্ষা '+(k+1)+'</h3>'+
-      '<div class="drillmeta" style="margin-bottom:10px">'+us.length+'টি ইউনিটের ওপর '+qs.length+'টি প্রশ্ন , সর্বোচ্চ ২টি ভুল হলে পাস. ফেল করলে এই ৭টি ইউনিট আবার পড়তে হবে.</div>'+
+      '<h3 style="margin:2px 0">📅 '+T('সাপ্তাহিক পরীক্ষা','Weekly Exam')+' '+(k+1)+'</h3>'+
+      '<div class="drillmeta" style="margin-bottom:10px">'+T(us.length+'টি ইউনিটের ওপর '+qs.length+'টি প্রশ্ন , সর্বোচ্চ ২টি ভুল হলে পাস. ফেল করলে এই ৭টি ইউনিট আবার পড়তে হবে.',qs.length+' questions from '+us.length+' units , at most 2 wrong to pass. Fail means re-studying these 7 units.')+'</div>'+
       body+'<div class="result hidden" id="wresult"></div>'+
-      '<div style="margin-top:10px"><button class="btn ghost" id="wExit">← পরে দেব</button></div></div>';
+      '<div style="margin-top:10px"><button class="btn ghost" id="wExit">'+T('← পরে দেব','← Later')+'</button></div></div>';
     document.getElementById("wExit").onclick=function(){history.back();};
     Array.prototype.forEach.call(v.querySelectorAll(".q"),function(qEl){
       var qi=+qEl.getAttribute("data-qi");var correct=qs[qi].answer;
@@ -855,15 +885,15 @@
       var r=document.getElementById("wresult"); r.classList.remove("hidden");
       if(wrong<=2){
         if(!progress._weekly)progress._weekly={}; progress._weekly[k]=true; saveP(progress); render_header();
-        r.innerHTML='<div style="color:var(--right);font-size:1.15rem">🎉 সাপ্তাহিক পরীক্ষা পাস! '+cc+' / '+qs.length+'</div>'+
-          '<div style="margin-top:10px"><button class="btn" id="wDone">✅ চালিয়ে যান</button></div>';
+        r.innerHTML='<div style="color:var(--right);font-size:1.15rem">🎉 '+T('সাপ্তাহিক পরীক্ষা পাস!','Weekly Exam passed!')+' '+cc+' / '+qs.length+'</div>'+
+          '<div style="margin-top:10px"><button class="btn" id="wDone">'+T('✅ চালিয়ে যান','✅ Continue')+'</button></div>';
         document.getElementById("wDone").onclick=function(){ withAd(function(){history.back();}); };
       } else {
         us.forEach(function(u){var p=progress[u.id]||{};p.review=true;progress[u.id]=p;}); saveP(progress);
-        r.innerHTML='<div style="color:var(--wrong);font-size:1.15rem">❌ '+wrong+'টি ভুল. পাস হয়নি.</div>'+
-          '<div style="margin-top:6px;font-size:.9rem">এই ৭টি ইউনিট আবার ভালো করে পড়ুন, তারপর আবার পরীক্ষা দিন.</div>'+
-          '<div style="margin-top:12px"><button class="btn" id="wReview">📖 প্রথম ইউনিট থেকে পড়ি</button> '+
-          '<button class="btn ghost" id="wRetry">🔁 আবার পরীক্ষা</button></div>';
+        r.innerHTML='<div style="color:var(--wrong);font-size:1.15rem">❌ '+T(wrong+'টি ভুল. পাস হয়নি.',wrong+' wrong. Not passed.')+'</div>'+
+          '<div style="margin-top:6px;font-size:.9rem">'+T('এই ৭টি ইউনিট আবার ভালো করে পড়ুন, তারপর আবার পরীক্ষা দিন.','Study these 7 units again, then retake the exam.')+'</div>'+
+          '<div style="margin-top:12px"><button class="btn" id="wReview">'+T('📖 প্রথম ইউনিট থেকে পড়ি','📖 Study from unit 1')+'</button> '+
+          '<button class="btn ghost" id="wRetry">'+T('🔁 আবার পরীক্ষা','🔁 Retake exam')+'</button></div>';
         document.getElementById("wReview").onclick=function(){ openUnit(us[0].id); };
         document.getElementById("wRetry").onclick=function(){ openWeekly(k); };
       }
@@ -943,30 +973,30 @@
     function show(){
       stopDrillTimer();
       if(idx>=qs.length){
-        v.innerHTML='<div class="drillbox"><h3>🎯 Drill শেষ</h3>'+
-          '<p>মসৃণ উত্তর: <b style="color:var(--right)">'+smooth+'</b> / '+qs.length+'</p>'+
-          '<p class="drillmeta">আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে. 🎤 Speaking এর টিক পড়ে গেছে.</p>'+
-          '<button class="btn" id="drillAgain">আবার ১০টা</button> <button class="btn ghost" id="drillExit">← ফিরে যাই</button></div>';
+        v.innerHTML='<div class="drillbox"><h3>🎯 '+T('Drill শেষ','Drill done')+'</h3>'+
+          '<p>'+T('মসৃণ উত্তর','Smooth answers')+': <b style="color:var(--right)">'+smooth+'</b> / '+qs.length+'</p>'+
+          '<p class="drillmeta">'+T('আটকে-যাওয়া প্রশ্ন পরের বার বেশি আসবে. 🎤 Speaking এর টিক পড়ে গেছে.','Stuck questions come back more often next time. 🎤 Speaking tick is done.')+'</p>'+
+          '<button class="btn" id="drillAgain">'+T('আবার ১০টা','Again (10)')+'</button> <button class="btn ghost" id="drillExit">'+T('← ফিরে যাই','← Back')+'</button></div>';
         autoMark("sp");
         document.getElementById("drillAgain").onclick=openDrill;
         document.getElementById("drillExit").onclick=function(){history.back();};
         return;
       }
       var item=qs[idx], left=5;
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+qs.length+', ভাবার সময় ৫ সেকেন্ড, তারপর জোরে উত্তর</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+T('প্রশ্ন','Question')+' '+(idx+1)+' / '+qs.length+', '+T('ভাবার সময় ৫ সেকেন্ড, তারপর জোরে উত্তর','think 5 seconds, then answer aloud')+'</div>'+
         '<div class="drillq">'+esc(item.q)+' '+ttsBtn(item.q)+'</div>'+
         '<div class="drillcount" id="dc">5</div>'+
-        '<div id="dctl"><button class="btn ghost small" id="drillStop">বন্ধ করি</button></div></div>';
+        '<div id="dctl"><button class="btn ghost small" id="drillStop">'+T('বন্ধ করি','Stop')+'</button></div></div>';
       document.getElementById("drillStop").onclick=function(){history.back();};
       drillTimer=setInterval(function(){
         left--;
         var dc=document.getElementById("dc"); if(!dc){stopDrillTimer();return;}
         if(left>0){ dc.textContent=left; return; }
         stopDrillTimer();
-        dc.outerHTML='<div class="drillsay">🎤 এখন উত্তর বলুন — ২-৩ বাক্য, তারপর থামুন.</div>';
+        dc.outerHTML='<div class="drillsay">🎤 '+T('এখন উত্তর বলুন — ২-৩ বাক্য, তারপর থামুন.','Now answer aloud — 2 to 3 sentences, then stop.')+'</div>';
         document.getElementById("dctl").innerHTML=
-          '<div class="drillans">💡 <b>নমুনা উত্তর</b> (নিজের সত্য তথ্য [ ]-এ বসান): '+ttsBtn(item.a||"")+'<br>'+esc(item.a||"")+'</div>'+
-          '<button class="btn" id="dok">✅ পেরেছি</button> <button class="btn ghost" id="dno">😵 আটকেছি</button>';
+          '<div class="drillans">💡 <b>'+T('নমুনা উত্তর','Sample answer')+'</b> '+T('(নিজের সত্য তথ্য [ ]-এ বসান)','(put your own facts in [ ])')+': '+ttsBtn(item.a||"")+'<br>'+esc(item.a||"")+'</div>'+
+          '<button class="btn" id="dok">'+T('✅ পেরেছি','✅ Got it')+'</button> <button class="btn ghost" id="dno">'+T('😵 আটকেছি','😵 Stuck')+'</button>';
         document.getElementById("dok").onclick=function(){ smooth++; idx++; show(); };
         document.getElementById("dno").onclick=function(){
           var w=drillWeights(); w[item.i]=(w[item.i]||0)+1; saveP(progress); idx++; show();
@@ -986,17 +1016,17 @@
     function show(){
       var d=CONVOS[idx];
       var lines=d.lines.map(function(l){
-        return '<div class="ex"><div class="en"><b>'+esc(l.sp)+':</b> '+esc(l.en)+' '+ttsBtn(l.en)+'</div><div class="bn">'+esc(l.bn)+'</div></div>';
+        return '<div class="ex"><div class="en"><b>'+esc(l.sp)+':</b> '+esc(l.en)+' '+ttsBtn(l.en)+'</div>'+(ENonly()?'':'<div class="bn">'+esc(l.bn)+'</div>')+'</div>';
       }).join("");
       v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
-        '<div class="drillmeta">সংলাপ '+(idx+1)+' / '+CONVOS.length+'</div>'+
-        '<h3 style="margin:6px 0">'+esc(d.title)+' <button class="btn ghost small" id="cvPlay">🔊 পুরোটা</button></h3>'+
-        '<div class="bn" style="margin-bottom:10px">'+esc(d.scene)+'</div>'+
+        '<div class="drillmeta">'+T('সংলাপ','Dialogue')+' '+(idx+1)+' / '+CONVOS.length+'</div>'+
+        '<h3 style="margin:6px 0">'+esc(d.title)+' <button class="btn ghost small" id="cvPlay">🔊 '+T('পুরোটা','Play all')+'</button></h3>'+
+        (ENonly()?'':'<div class="bn" style="margin-bottom:10px">'+esc(d.scene)+'</div>')+
         '<div class="exgrid" style="grid-template-columns:1fr">'+lines+'</div>'+
         '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'+
-        (idx>0?'<button class="btn ghost" id="cvPrev">← আগের</button>':'')+
-        (idx<CONVOS.length-1?'<button class="btn" id="cvNext">পরের →</button>':'<button class="btn" id="cvDone">✅ শেষ</button>')+
-        '<button class="btn ghost" id="cvExit">প্র্যাকটিসে ফিরি</button></div></div>';
+        (idx>0?'<button class="btn ghost" id="cvPrev">'+T('← আগের','← Prev')+'</button>':'')+
+        (idx<CONVOS.length-1?'<button class="btn" id="cvNext">'+T('পরের →','Next →')+'</button>':'<button class="btn" id="cvDone">'+T('✅ শেষ','✅ Done')+'</button>')+
+        '<button class="btn ghost" id="cvExit">'+T('প্র্যাকটিসে ফিরি','Back to Practice')+'</button></div></div>';
       var pl=document.getElementById("cvPlay");
       pl.onclick=function(){ var i=0; (function seq(){ if(i>=d.lines.length){return;} speak(d.lines[i].en); i++; setTimeout(seq, Math.max(1600, d.lines[i-1].en.length*70)); })(); };
       var nx=document.getElementById("cvNext"); if(nx)nx.onclick=function(){idx++;show();window.scrollTo(0,0);};
@@ -1008,20 +1038,20 @@
   }
 
   function openSents(){
-    var v=engineView(); var ci=0;
+    var v=engineView(); var ci=0; var SC_EN=['Introductions','Politeness','Shopping','Directions & travel','Food & restaurant','Asking for help','Opinions & feelings','Time & plans','Phone & messages','Emergencies'];
     function show(){
       var c=SENTS[ci];
       var items=c.items.map(function(s){
-        return '<div class="ex"><div class="en">'+esc(s.en)+' '+ttsBtn(s.en)+'</div><div class="bn">'+esc(s.bn)+'</div></div>';
+        return '<div class="ex"><div class="en">'+esc(s.en)+' '+ttsBtn(s.en)+'</div>'+(ENonly()?'':'<div class="bn">'+esc(s.bn)+'</div>')+'</div>';
       }).join("");
-      var tabs=SENTS.map(function(c2,i){return '<button class="lchip'+(i===ci?' active':'')+'" data-i="'+i+'">'+esc(c2.title)+'</button>';}).join("");
+      var tabs=SENTS.map(function(c2,i){return '<button class="lchip'+(i===ci?' active':'')+'" data-i="'+i+'">'+esc(ENonly()&&SC_EN[i]?SC_EN[i]:c2.title)+'</button>';}).join("");
       v.innerHTML='<div class="drillbox" style="text-align:left;max-width:680px">'+
-        '<div class="drillmeta">বিভাগ '+(ci+1)+' / '+SENTS.length+'</div>'+
+        '<div class="drillmeta">'+T('বিভাগ','Section')+' '+(ci+1)+' / '+SENTS.length+'</div>'+
         '<div class="levelbar" style="margin:8px 0">'+tabs+'</div>'+
-        '<h3 style="margin:4px 0 10px">'+esc(c.title)+'</h3>'+
+        '<h3 style="margin:4px 0 10px">'+esc(ENonly()&&SC_EN[ci]?SC_EN[ci]:c.title)+'</h3>'+
         '<div class="exgrid" style="grid-template-columns:1fr">'+items+'</div>'+
-        '<div style="margin-top:14px"><button class="btn" id="stDone">✅ পড়া হয়েছে</button> '+
-        '<button class="btn ghost" id="stExit">প্র্যাকটিসে ফিরি</button></div></div>';
+        '<div style="margin-top:14px"><button class="btn" id="stDone">'+T('✅ পড়া হয়েছে','✅ Done reading')+'</button> '+
+        '<button class="btn ghost" id="stExit">'+T('প্র্যাকটিসে ফিরি','Back to Practice')+'</button></div></div>';
       Array.prototype.forEach.call(v.querySelectorAll(".levelbar .lchip"),function(t){
         t.onclick=function(){ci=+t.getAttribute("data-i");show();window.scrollTo(0,0);};
       });
@@ -1040,30 +1070,30 @@
     window.scrollTo(0,0); return v;
   }
   var PRON=[
-    {w:"ship — sheep", tip:"'ship' এ i ছোট্ট করে; 'sheep' এ ee টেনে লম্বা."},
-    {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়."},
-    {w:"very — wary", tip:"'v' তে উপরের দাঁত নিচের ঠোঁটে লাগান; 'w' তে ঠোঁট গোল, দাঁত লাগবে না."},
-    {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ."},
-    {w:"pull — full", tip:"'p' তে বাতাসের ধাক্কা (কাগজ নড়বে); 'f' তে দাঁত-ঠোঁটে বাতাস."},
-    {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে. হাত মুখের সামনে রেখে পরখ করুন."},
-    {w:"see — she", tip:"s সাপের শব্দ; 'sh' তে ঠোঁট এগিয়ে ‘শ’."},
-    {w:"sip — zip", tip:"'s' এ গলা কাঁপে না; 'z' এ গলায় হাত দিলে কাঁপুনি টের পাবেন."},
-    {w:"think — sink", tip:"'th' তে জিভের ডগা দাঁতের ফাঁকে; 's' এ জিভ ভেতরে."},
-    {w:"they — day", tip:"'they' র th নরম কাঁপা শব্দ; 'day' তে জিভ দাঁতের পেছনে ঠোকা."},
-    {w:"cat — cut — cart", tip:"'cat' এ অ্যা; 'cut' এ ছোট আ; 'cart' এ লম্বা আ-র."},
-    {w:"walk — work", tip:"'walk' এ ‘ওয়াক’ (l নীরব); 'work' এ ‘ওয়ার্ক’ — er শব্দ."},
-    {w:"heart — hurt", tip:"'heart' এ লম্বা আ; 'hurt' এ er — দুটোই r আছে কিন্তু স্বর আলাদা."},
-    {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন)."},
-    {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা)."},
-    {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না."},
-    {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়."},
-    {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব."},
-    {w:"receipt", tip:"‘রি-সিট’ — p সম্পূর্ণ নীরব."},
-    {w:"island", tip:"‘আই-ল্যান্ড’ — s নীরব."},
-    {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না."},
-    {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়."},
-    {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়."},
-    {w:"world — word", tip:"'world' এ r+l দুটোই; 'word' এ শুধু 'er' ড."}
+    {w:"ship — sheep", tip:"'ship' এ i ছোট্ট করে; 'sheep' এ ee টেনে লম্বা.",tipEn:"'ship' has a short i; 'sheep' has a long ee. Stretch the ee."},
+    {w:"live — leave", tip:"live ছোট i; leave লম্বা ee — না টানলে অর্থ বদলে যায়.",tipEn:"'live' short i; 'leave' long ee. The length changes the meaning."},
+    {w:"very — wary", tip:"'v' তে উপরের দাঁত নিচের ঠোঁটে লাগান; 'w' তে ঠোঁট গোল, দাঁত লাগবে না.",tipEn:"For 'v' the top teeth touch the lower lip; for 'w' the lips round, no teeth."},
+    {w:"west — vest", tip:"w ঠোঁট গোল করে; v দাঁত-ঠোঁটে ঘষা শব্দ.",tipEn:"'w' rounds the lips; 'v' is a buzzing teeth-on-lip sound."},
+    {w:"pull — full", tip:"'p' তে বাতাসের ধাক্কা (কাগজ নড়বে); 'f' তে দাঁত-ঠোঁটে বাতাস.",tipEn:"'p' is a puff of air (paper moves); 'f' is air through teeth and lip."},
+    {w:"pan — fan", tip:"p ঠোঁট ফাটিয়ে; f ঘষে. হাত মুখের সামনে রেখে পরখ করুন.",tipEn:"'p' bursts from the lips; 'f' rubs. Test with a hand in front of your mouth."},
+    {w:"see — she", tip:"s সাপের শব্দ; 'sh' তে ঠোঁট এগিয়ে ‘শ’.",tipEn:"'s' is a snake sound; 'sh' pushes the lips forward."},
+    {w:"sip — zip", tip:"'s' এ গলা কাঁপে না; 'z' এ গলায় হাত দিলে কাঁপুনি টের পাবেন.",tipEn:"'s' has no throat buzz; 'z' buzzes (feel it with a hand on your throat)."},
+    {w:"think — sink", tip:"'th' তে জিভের ডগা দাঁতের ফাঁকে; 's' এ জিভ ভেতরে.",tipEn:"'th' puts the tongue tip between the teeth; 's' keeps the tongue inside."},
+    {w:"they — day", tip:"'they' র th নরম কাঁপা শব্দ; 'day' তে জিভ দাঁতের পেছনে ঠোকা.",tipEn:"'they' has a soft voiced th; 'day' taps the tongue behind the teeth."},
+    {w:"cat — cut — cart", tip:"'cat' এ অ্যা; 'cut' এ ছোট আ; 'cart' এ লম্বা আ-র.",tipEn:"'cat' is a flat a; 'cut' a short uh; 'cart' a long ar."},
+    {w:"walk — work", tip:"'walk' এ ‘ওয়াক’ (l নীরব); 'work' এ ‘ওয়ার্ক’ — er শব্দ.",tipEn:"'walk' sounds like 'wawk' (silent l); 'work' has an 'er' sound."},
+    {w:"heart — hurt", tip:"'heart' এ লম্বা আ; 'hurt' এ er — দুটোই r আছে কিন্তু স্বর আলাদা.",tipEn:"'heart' has a long ar; 'hurt' has 'er'. Both have r, different vowels."},
+    {w:"PREsent — preSENT", tip:"noun হলে চাপ শুরুতে (উপহার); verb হলে শেষে (উপস্থাপন).",tipEn:"Noun: stress at the start (a gift). Verb: stress at the end (to show)."},
+    {w:"REcord — reCORD", tip:"noun REcord (রেকর্ডটা); verb reCORD (রেকর্ড করা).",tipEn:"Noun REcord (the record); verb reCORD (to record it)."},
+    {w:"comfortable", tip:"‘কাম্ফ-টা-বল’ — মাঝের or প্রায় উচ্চারিত হয় না.",tipEn:"Say 'KUMF-tuh-bul' — the middle 'or' almost disappears."},
+    {w:"vegetable", tip:"‘ভেজ-টা-বল’ — ৩ ভাগ, ৪ নয়.",tipEn:"Say 'VEJ-tuh-bul' — 3 parts, not 4."},
+    {w:"Wednesday", tip:"‘ওয়েনজ-ডে’ — প্রথম d নীরব.",tipEn:"Say 'WENZ-day' — the first d is silent."},
+    {w:"receipt", tip:"‘রি-সিট’ — p সম্পূর্ণ নীরব.",tipEn:"Say 'ri-SEET' — the p is completely silent."},
+    {w:"island", tip:"‘আই-ল্যান্ড’ — s নীরব.",tipEn:"Say 'EYE-land' — the s is silent."},
+    {w:"clothes", tip:"‘ক্লোউজ’-এর মত — the আলাদা করে বলবেন না.",tipEn:"Say it like 'kloze' — do not add a separate 'th'."},
+    {w:"months", tip:"শেষে nths — ‘মান্থস’ একটানে, ‘মান্থেস’ নয়.",tipEn:"End with 'nths' — say 'munths' in one go, not 'mun-thes'."},
+    {w:"asked", tip:"‘আস্কট’ — ed এখানে t শব্দ, ‘আসকেড’ নয়.",tipEn:"Say 'askt' — here 'ed' sounds like t, not 'ask-ed'."},
+    {w:"world — word", tip:"'world' এ r+l দুটোই; 'word' এ শুধু 'er' ড.",tipEn:"'world' has both r and l; 'word' has only the 'er' plus d."}
   ];
   function openPron(){
     var v=engineView();
@@ -1071,18 +1101,18 @@
     function say(it){ speak(it.w.replace(/—/g,", ")); }
     function show(){
       if(idx>=items.length){
-        v.innerHTML='<div class="drillbox"><h3>🔊 উচ্চারণ drill শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে. ঠোঁট-জিভের অবস্থান মনে রাখুন.</p>'+
-          '<button class="btn" id="prA">আবার ৮টা</button> <button class="btn ghost" id="prX">← ফিরে যাই</button></div>';
+        v.innerHTML='<div class="drillbox"><h3>🔊 '+T('উচ্চারণ drill শেষ','Pronunciation drill done')+'</h3><p class="drillmeta">'+T('আজকের টিক পড়ে গেছে. ঠোঁট-জিভের অবস্থান মনে রাখুন.','Today\'s tick is done. Remember the lip and tongue position.')+'</p>'+
+          '<button class="btn" id="prA">'+T('আবার ৮টা','Again (8)')+'</button> <button class="btn ghost" id="prX">'+T('← ফিরে যাই','← Back')+'</button></div>';
         autoMark("pr");
         document.getElementById("prA").onclick=function(){idx=0;items=PRON.slice().sort(function(){return Math.random()-0.5;}).slice(0,8);show();};
         document.getElementById("prX").onclick=function(){history.back();};
         return;
       }
       var it=items[idx];
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', শুনুন → ৩ বার জোরে বলুন</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', '+T('শুনুন → ৩ বার জোরে বলুন','listen → say it aloud 3 times')+'</div>'+
         '<div class="drillq">'+esc(it.w)+' '+ttsBtn(it.w.replace(/—/g,", "))+'</div>'+
-        '<div class="drillans" style="text-align:center">💡 '+esc(it.tip)+'</div>'+
-        '<button class="btn" id="prN">পরেরটা →</button> <button class="btn ghost" id="prS">বন্ধ করি</button></div>';
+        '<div class="drillans" style="text-align:center">💡 '+esc(ENonly()&&it.tipEn?it.tipEn:it.tip)+'</div>'+
+        '<button class="btn" id="prN">'+T('পরেরটা →','Next →')+'</button> <button class="btn ghost" id="prS">'+T('বন্ধ করি','Stop')+'</button></div>';
       say(it);
       document.getElementById("prN").onclick=function(){idx++;show();};
       document.getElementById("prS").onclick=function(){history.back();};
@@ -1106,22 +1136,22 @@
     var idx=0;
     function show(){
       if(idx>=items.length){
-        v.innerHTML='<div class="drillbox"><h3>🎧 Listening শেষ</h3><p class="drillmeta">আজকের টিক পড়ে গেছে.</p>'+
-          '<button class="btn" id="liA">আবার ৮টা</button> <button class="btn ghost" id="liX">← ফিরে যাই</button></div>';
+        v.innerHTML='<div class="drillbox"><h3>🎧 '+T('Listening শেষ','Listening done')+'</h3><p class="drillmeta">'+T('আজকের টিক পড়ে গেছে.','Today\'s tick is done.')+'</p>'+
+          '<button class="btn" id="liA">'+T('আবার ৮টা','Again (8)')+'</button> <button class="btn ghost" id="liX">'+T('← ফিরে যাই','← Back')+'</button></div>';
         autoMark("li");
         document.getElementById("liA").onclick=openListenRestart;
         document.getElementById("liX").onclick=function(){history.back();};
         return;
       }
       var it=items[idx];
-      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', আগে শুনুন — না দেখে বোঝার চেষ্টা</div>'+
+      v.innerHTML='<div class="drillbox"><div class="drillmeta">'+(idx+1)+' / '+items.length+', '+T('আগে শুনুন — না দেখে বোঝার চেষ্টা','listen first — try to understand without looking')+'</div>'+
         '<div style="font-size:2.6rem;margin:14px 0">🎧</div>'+
-        '<div id="lctl"><button class="btn" id="liP">🔊 আবার শুনি</button> <button class="btn ghost" id="liR">উত্তর দেখাও</button></div></div>';
+        '<div id="lctl"><button class="btn" id="liP">🔊 '+T('আবার শুনি','Listen again')+'</button> <button class="btn ghost" id="liR">'+T('উত্তর দেখাও','Show answer')+'</button></div></div>';
       speak(it.en);
       document.getElementById("liP").onclick=function(){speak(it.en);};
       document.getElementById("liR").onclick=function(){
-        document.getElementById("lctl").innerHTML='<div class="drillans"><b>'+esc(it.en)+'</b> '+ttsBtn(it.en)+'<br>'+esc(it.bn)+'</div>'+
-          '<button class="btn" id="liN">পরেরটা →</button>';
+        document.getElementById("lctl").innerHTML='<div class="drillans"><b>'+esc(it.en)+'</b> '+ttsBtn(it.en)+(ENonly()?'':'<br>'+esc(it.bn))+'</div>'+
+          '<button class="btn" id="liN">'+T('পরেরটা →','Next →')+'</button>';
         document.getElementById("liN").onclick=function(){idx++;show();};
       };
     }
@@ -1140,8 +1170,8 @@
     var idx=0,score=0;
     function show(){
       if(idx>=items.length){
-        v.innerHTML='<div class="drillbox"><h3>📝 মিশ্র টেস্ট শেষ</h3><p>ফল: <b style="color:var(--right)">'+score+'</b> / '+items.length+'</p>'+
-          '<button class="btn" id="mxA">আবার ১০টা</button> <button class="btn ghost" id="mxX">← ফিরে যাই</button></div>';
+        v.innerHTML='<div class="drillbox"><h3>📝 '+T('মিশ্র টেস্ট শেষ','Mixed test done')+'</h3><p>'+T('ফল','Score')+': <b style="color:var(--right)">'+score+'</b> / '+items.length+'</p>'+
+          '<button class="btn" id="mxA">'+T('আবার ১০টা','Again (10)')+'</button> <button class="btn ghost" id="mxX">'+T('← ফিরে যাই','← Back')+'</button></div>';
         autoMark("mcq");
         document.getElementById("mxA").onclick=function(){idx=0;score=0;items=[];used={};
           while(items.length<10&&items.length<all.length){var r=Math.floor(Math.random()*all.length);if(!used[r]){used[r]=1;items.push(all[r]);}}
@@ -1150,7 +1180,7 @@
         return;
       }
       var t=items[idx];
-      v.innerHTML='<div class="drillbox" style="text-align:left"><div class="drillmeta">প্রশ্ন '+(idx+1)+' / '+items.length+', স্কোর '+score+'</div>'+
+      v.innerHTML='<div class="drillbox" style="text-align:left"><div class="drillmeta">'+T('প্রশ্ন','Question')+' '+(idx+1)+' / '+items.length+', '+T('স্কোর','score')+' '+score+'</div>'+
         '<div style="font-weight:700;margin:10px 0;font-size:1.02rem">'+gapify(hl(t.q))+'</div>'+
         '<div class="opts long" id="mxopts">'+t.options.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+hl(o)+'</button>';}).join("")+'</div>'+
         '<div id="mxnext"></div></div>';
@@ -1162,7 +1192,7 @@
             var xi=+x.getAttribute("data-i"); if(xi===t.answer)x.classList.add("right"); else if(xi===i)x.classList.add("wrong");});
           if(i===t.answer)score++;
           var bl=v.querySelector(".blank"); if(bl){bl.textContent=t.options[t.answer];bl.classList.add("filled");}
-          document.getElementById("mxnext").innerHTML='<div class="explain show">💡 '+hl(t.explain||"")+'</div><button class="btn" id="mxN" style="margin-top:10px">পরেরটা →</button>';
+          document.getElementById("mxnext").innerHTML='<div class="explain show">💡 '+hl(LG(t,'explain'))+'</div><button class="btn" id="mxN" style="margin-top:10px">'+T('পরেরটা →','Next →')+'</button>';
           document.getElementById("mxN").onclick=function(){idx++;show();};
         };
       });
@@ -1176,7 +1206,7 @@
     var data=JSON.stringify(progress,null,2);
     var hasNativeSave=false;
     try{ hasNativeSave=(typeof AndroidBridge!=="undefined")&&(typeof AndroidBridge.saveFile==="function"); }catch(e){}
-    if(hasNativeSave){ try{AndroidBridge.saveFile(name,data);}catch(e){alert("Save হলো না.");} return; }
+    if(hasNativeSave){ try{AndroidBridge.saveFile(name,data);}catch(e){alert(T("Save হলো না.","Save failed."));} return; }
     var blob=new Blob([data],{type:"application/json"});
     var a=document.createElement("a");a.href=URL.createObjectURL(blob);
     a.download=name;a.click();
@@ -1184,11 +1214,11 @@
   document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
   document.getElementById("importFile").onchange=function(e){
     var f=e.target.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(){try{progress=JSON.parse(r.result);saveP(progress);showTab("Progress");alert("Restore হয়েছে ✅");}catch(err){alert("ফাইল পড়া গেল না.");}};
+    r.onload=function(){try{progress=JSON.parse(r.result);saveP(progress);showTab("Progress");alert(T("Restore হয়েছে ✅","Restored ✅"));}catch(err){alert(T("ফাইল পড়া গেল না.","Could not read the file."));}};
     r.readAsText(f);
   };
   document.getElementById("resetBtn").onclick=function(){
-    if(confirm("সব progress মুছে যাবে — নিশ্চিত?")){progress={};saveP(progress);showTab("Progress");}
+    if(confirm(T("সব progress মুছে যাবে — নিশ্চিত?","All progress will be deleted — sure?"))){progress={};saveP(progress);showTab("Progress");}
   };
 
   /* ---------- global speaker-button handler ---------- */
@@ -1206,6 +1236,8 @@
   });
 
   /* ---------- init ---------- */
+  var _lb=document.getElementById("langBtn"); if(_lb)_lb.onclick=function(){ setLang(LANG==='en'?'bn':'en'); };
+  applyStaticUI();
   if(!DATA.length)document.getElementById("ulist").innerHTML='<p style="color:var(--muted)">data.js খালি.</p>';
   render_levelbar(); render_list(); render_header();
 })();
