@@ -105,6 +105,32 @@
   .ptab .en{font-size:.97rem}
   .ptab .bn{font-size:.8rem;color:var(--muted)}
   .chev{color:var(--muted);flex:none;font-size:1.1rem}
+  /* ===== table of contents ===== */
+  .contcard{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    border:none;border-radius:20px;padding:15px 16px;margin:2px 0 14px;font-family:inherit;
+    background:linear-gradient(120deg,var(--brand),var(--brand2));color:#fff;
+    box-shadow:0 6px 18px rgba(30,136,229,.28)}
+  .contcard .ci{font-size:1.9rem;flex:none}
+  .contcard .cl{font-size:.72rem;opacity:.9;font-weight:700;letter-spacing:.04em}
+  .contcard .ct{font-weight:800;font-size:1rem;line-height:1.35;margin-top:1px}
+  .contcard .cg{font-size:.75rem;opacity:.92;margin-top:2px}
+  .chap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    margin:0 0 10px;overflow:hidden}
+  .chaphead{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    background:none;border:none;font-family:inherit;color:var(--fg);padding:13px 14px}
+  .chapic{font-size:1.5rem;flex:none}
+  .chapmain{flex:1;min-width:0}
+  .chaptitle{font-weight:800;font-size:.96rem}
+  .chapsub{font-size:.75rem;color:var(--muted);margin-top:1px}
+  .chapbar{height:5px;background:var(--card2);border-radius:4px;overflow:hidden;margin-top:7px}
+  .chapbar>i{display:block;height:100%;width:0;border-radius:4px;
+    background:linear-gradient(90deg,var(--brand),var(--brand2))}
+  .chapcount{font-size:.72rem;color:var(--muted);font-weight:700;flex:none}
+  .chaparrow{color:var(--muted);flex:none;font-size:1rem;transition:transform .2s}
+  .chap.open .chaparrow{transform:rotate(90deg)}
+  .chapbody{display:none;padding:0 10px 10px}
+  .chap.open .chapbody{display:block}
+  .lvlband{font-size:.72rem;font-weight:800;color:var(--muted);margin:16px 0 8px;letter-spacing:.04em}
 
   /* ===== practice tab ===== */
   .sectitle{font-size:1rem;font-weight:800;margin:16px 0 10px}
@@ -241,8 +267,10 @@
 <div class="wrap">
   <!-- LEARN -->
   <div id="viewLearn">
+    <div id="contwrap"></div>
     <div class="levelbar" id="levelbar"></div>
     <input class="search" id="search" placeholder="🔎 unit খুঁজুন (নাম বা নম্বর)...">
+    <div id="toclist"></div>
     <div class="ulist" id="ulist"></div>
   </div>
 
@@ -416,14 +444,94 @@
       c.onclick=function(){activeLevel=c.getAttribute("data-l");render_levelbar();render_list();};
     });
   }
+  /* ---------- table of contents ---------- */
+  var CHAPTERS=(window.STUDY_DATA&&window.STUDY_DATA.chapters)||[];
+  var openChap={};
+  function unitById(id){ for(var i=0;i<DATA.length;i++)if(DATA[i].id===id)return DATA[i]; return null; }
+  function nextUnit(){
+    for(var i=0;i<DATA.length;i++){ var pr=progress[DATA[i].id]; if(!pr||!pr.done)return DATA[i]; }
+    return DATA[0];
+  }
+  function render_continue(){
+    var el=document.getElementById("contwrap"); if(!el)return;
+    var u=nextUnit(); if(!u){el.innerHTML="";return;}
+    var done=0; DATA.forEach(function(x){var p=progress[x.id];if(p&&p.done)done++;});
+    el.innerHTML='<button class="contcard" id="contBtn"><span class="ci">'+(done===0?"🚀":"▶️")+'</span>'+
+      '<span class="cm"><span class="cl">'+(done===0?"শুরু করুন":"চালিয়ে যান")+'</span>'+
+      '<div class="ct">'+esc(u.title)+'</div>'+
+      '<div class="cg">'+u.level+' , '+u.id+' , '+done+'/'+DATA.length+' unit শেষ</div></span></button>';
+    document.getElementById("contBtn").onclick=function(){ openUnit(u.id); };
+  }
+  function bindUnitRows(scope){
+    Array.prototype.forEach.call(scope.querySelectorAll(".urow"),function(c){
+      c.onclick=function(){
+        var id=c.getAttribute("data-id");
+        if(c.getAttribute("data-locked")==="1"){
+          _pendingUnlock=id;
+          if(confirm("এই unit এখনো locked. আগের unit এর টেস্টে ৭০%+ পেলে এমনিতেই খুলবে.\n\nএখনই খুলতে চাইলে একটা ভিডিও দেখুন?")){
+            try{AndroidBridge.showRewarded('onRewardUnlock');}catch(e){}
+          }
+          return;
+        }
+        openUnit(id);
+      };
+    });
+  }
+  function render_toc(){
+    var el=document.getElementById("toclist"); if(!el)return;
+    var lvlSeen={}, html="";
+    CHAPTERS.forEach(function(c,ci){
+      if(activeLevel!=="ALL"&&c.level!==activeLevel)return;
+      if(!lvlSeen[c.level]){lvlSeen[c.level]=1; html+='<div class="lvlband">'+c.level+' স্তর</div>';}
+      var tot=c.units.length, done=0;
+      c.units.forEach(function(id){var p=progress[id];if(p&&p.done)done++;});
+      var pct=tot?Math.round(done/tot*100):0;
+      var rows=c.units.map(function(id){
+        var u=unitById(id); if(!u)return "";
+        var pr=progress[id]||{};
+        var upct=pr.score?Math.round(pr.score.correct/pr.score.total*100):(pr.done?100:0);
+        var locked=!isUnlocked(DATA.indexOf(u));
+        var inner=locked?"🔒":(pr.done?"✓":(pr.score?upct+"":""));
+        return '<div class="urow'+(locked?' locked':'')+'" data-id="'+id+'" data-locked="'+(locked?1:0)+'">'+
+          '<div class="'+(pr.done?"ring done":"ring")+'" style="--p:'+upct+'"><b>'+inner+'</b></div>'+
+          '<div class="umain"><div class="utitle">'+esc(u.title)+'</div>'+
+          '<div class="usub"><span>'+id+'</span><span>'+(u.test?u.test.length:0)+' প্রশ্ন</span>'+
+          (u.diagram?'<span>🖼️</span>':'')+(pr.done&&pr.date?'<span>📅 '+pr.date+'</span>':'')+'</div></div>'+
+          '<div class="chev">›</div></div>';
+      }).join("");
+      html+='<div class="chap'+(openChap[ci]?" open":"")+'" data-ci="'+ci+'">'+
+        '<button class="chaphead" data-ci="'+ci+'"><span class="chapic">'+esc(c.icon||"📘")+'</span>'+
+        '<span class="chapmain"><div class="chaptitle">'+esc(c.title)+'</div>'+
+        '<div class="chapsub">'+esc(c.sub||"")+'</div>'+
+        '<div class="chapbar"><i style="width:'+pct+'%"></i></div></span>'+
+        '<span class="chapcount">'+done+'/'+tot+'</span><span class="chaparrow">›</span></button>'+
+        '<div class="chapbody"><div class="ulist">'+rows+'</div></div></div>';
+    });
+    el.innerHTML=html||'<p style="color:var(--muted)">কিছু পাওয়া যায়নি.</p>';
+    Array.prototype.forEach.call(el.querySelectorAll(".chaphead"),function(h){
+      h.onclick=function(){ var ci=+h.getAttribute("data-ci"); openChap[ci]=!openChap[ci];
+        h.parentNode.classList.toggle("open",!!openChap[ci]); };
+    });
+    bindUnitRows(el);
+  }
   function render_list(){
     var q=(document.getElementById("search").value||"").toLowerCase();
+    var toc=document.getElementById("toclist"), flat=document.getElementById("ulist"),
+        cont=document.getElementById("contwrap");
+    if(!q){
+      if(toc)toc.style.display="block";
+      if(flat){flat.style.display="none";flat.innerHTML="";}
+      if(cont)cont.style.display=(activeLevel==="ALL")?"block":"none";
+      render_continue(); render_toc(); return;
+    }
+    if(toc){toc.style.display="none";toc.innerHTML="";}
+    if(cont)cont.style.display="none";
+    if(flat)flat.style.display="grid";
     var list=DATA.filter(function(u){
       if(activeLevel!=="ALL"&&u.level!==activeLevel)return false;
-      if(q)return (u.title+" "+u.id+" "+(u.ref||"")).toLowerCase().indexOf(q)>=0;
-      return true;
+      return (u.title+" "+u.id+" "+(u.ref||"")).toLowerCase().indexOf(q)>=0;
     });
-    var el=document.getElementById("ulist");
+    var el=flat;
     if(!list.length){el.innerHTML='<p style="color:var(--muted)">কিছু পাওয়া যায়নি.</p>';return;}
     el.innerHTML=list.map(function(u){
       var pr=progress[u.id]||{};
