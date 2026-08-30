@@ -15,10 +15,9 @@ internet connection.
 
 ## Screenshots
 
-<!-- Replace these placeholders with real images before release -->
-| Home | Lesson | Practice | Interview Drill |
+| Home (chapters) | Lesson (learn) | Practice hub | Pronunciation |
 |------|--------|----------|-----------------|
-| ![Home](assets/screenshots/home.png) | ![Lesson](assets/screenshots/lesson.png) | ![Practice](assets/screenshots/practice.png) | ![Interview](assets/screenshots/interview.png) |
+| ![Home](assets/screenshots/home.png) | ![Lesson](assets/screenshots/lesson.png) | ![Practice](assets/screenshots/practice.png) | ![Pronunciation](assets/screenshots/interview.png) |
 
 ---
 
